@@ -1,5 +1,4 @@
 import React from 'react';
-import TextScramble from '@/components/TextScramble/page';
 
 export default function Home() {
   return (
@@ -9,9 +8,7 @@ export default function Home() {
           <img src="SkyDark.png" alt="" />
         </div>
         <div className="text-3xl font-mono text-gray-200 lg:text-6xl md:text-4xlb">  
-          <TextScramble 
-           text="Welcome to SkyDark"
-          />
+           Welcome to SkyDark
         </div>
       </main>
     </div>
