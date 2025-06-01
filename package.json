@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "flowbite-react": "^0.11.7",
     "framer-motion": "^12.12.2",
     "icons": "^1.0.0",
@@ -16,7 +18,10 @@
     "next": "15.1.8",
     "react": "^19.1.0",
     "react-dom": "^19.0.0",
-    "react-icons": "^5.5.0"
+    "react-icons": "^5.5.0",
+    "tailwind-merge": "^3.3.0",
+    "tailwindcss-animate": "^1.0.7",
+    "tw-elements-react": "^1.0.0-alpha-end"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

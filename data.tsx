@@ -13,6 +13,17 @@ const founders = [
   },
 ];
 
+const partnership = [
+  {
+    image:"SkyDark.png",
+    name: "Phoenix club",
+  },
+  {
+    image:"SkyDark.png",
+    name: "Astro club",
+  }
+];
+
 const provide = [
   {
     image: "",
@@ -31,4 +42,5 @@ const provide = [
 export{
   'founders',
   'provide',
+  'partnership',
 }
