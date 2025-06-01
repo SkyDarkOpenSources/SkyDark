@@ -44,7 +44,6 @@ export default function TextScramble({ text, className }: TextScrambleProps) {
     return () => clearInterval(interval);
   }, [text]);
 
-  
   return (
     <span 
       className={className} 
