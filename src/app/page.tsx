@@ -9,8 +9,8 @@ export default function Home() {
           <Image 
            src="/SkyDark.png"
            alt="SkyDark Logo"
-           width={200}
-           height={200}
+           width={348}
+           height={348}
           />
         </div>
         <div className="text-3xl font-mono text-gray-200 lg:text-6xl md:text-4xlb">  
