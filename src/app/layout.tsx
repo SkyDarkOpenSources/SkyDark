@@ -14,8 +14,14 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SkyDark",
-  description: "A Space-Tech company",
+  title: "SkyDark | Home",
+  description: "A Space-Tech company aiming to build model rockets, drones, robotics and more. All projects are open-source and available on GitHub.",
+  openGraph: {
+    title: "SkyDark",
+    description: "A Space-Tech company aiming to build model rockets, drones, robotics and more. All projects are open-source and available on GitHub.",
+    url: "https://www.skydark.net",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
@@ -29,9 +35,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased font-sans`}
       >
         <Navbar />
-        <div className="absolute inset-0 -z-10 h-full w-full items-center px-5 py-24 [background:radial-gradient(125%_125%_at_50%_10%,#000_40%,#63e_100%)]">
           {children}
-        </div>
       </body>
     </html>
   );
