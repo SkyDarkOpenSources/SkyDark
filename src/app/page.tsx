@@ -1,6 +1,5 @@
 import React from 'react';
 import Image from 'next/image';
-import TextScramble from '@/components/TextScramble/page';
 
 export default function Home() {
   return (
@@ -16,10 +15,7 @@ export default function Home() {
         </div>
         <div className="flex flex-col gap-3 text-3xl font-mono text-gray-200 lg:text-6xl md:text-4xlb">  
            <div className='text-center'>
-              <TextScramble 
-                text="Welcome to SkyDark"
-                className="text-6xl font-bold text-gray-200"
-              />
+              Welcome to SkyDark
            </div>
            <div className='text-2xl text-gray-500 text-center'>| Space-tech company | Drones | Model-Rockets |</div>
         </div>
