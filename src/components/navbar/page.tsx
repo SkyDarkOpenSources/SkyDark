@@ -2,7 +2,7 @@ import { FaBars } from "react-icons/fa";
 
 export default function Navbar() {
     return (
-        <nav className="p-5 flex flex-row-2 justify-between">
+        <nav className="bg-transparent p-5 flex flex-row-2 justify-between">
             <div className="text-3xl font-bold text-slate-100 font-sans">
                 SkyDark
             </div>
