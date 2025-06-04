@@ -23,7 +23,8 @@ export default function Navbar() {
                 </div>
                 <div className="lg:hidden md:hidden visible"> 
                     <a href="">
-                        <FaBars className="text-3xl" />
+                        <FaBars className="text-3xl"
+                        />
                     </a>
                 </div>   
             </div>
