@@ -13,7 +13,12 @@ export default function Menubar(){
                     </div>
                 </div>
                 <div className="h-60 w-60 lg:h-96 lg:w-96 md:h-80 md:w-80 place-content-center">
-                    <img src="/favicon.ico" alt="SkyDark" />
+                    <Image 
+                     src="/favicon.ico"
+                      alt="SkyDark"
+                      height={1000}
+                      width={1000}
+                    />
                 </div>
             </main>
         </div>
