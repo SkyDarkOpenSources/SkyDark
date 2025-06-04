@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   twitter: {
     title: "SkyDark",
     description:
-      "An interschool debate tournament organised by DPS MIS for all high school students in Qatar ",
+      "Space-tech company, aiming to build drones, model rockets, robots, and more. From building basic robots to launching rockets, we do it all. Join us in our journey to explore the world of tech and beyond.",
     images: [
       {
         url: "/favicon.ico",
@@ -57,9 +57,9 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased font-sans`}
       >
         <Navbar />
-        <div className="absolute top-0 z-[-2] h-screen w-screen bg-neutral-200 dark:bg-neutral-950 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]"></div>
+        <div className="absolute top-0 bottom-0 z-[-2] h-screen w-screen bg-neutral-900 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]">
           {children}
-        <Footer />
+        </div>
       </body>
     </html>
   );
