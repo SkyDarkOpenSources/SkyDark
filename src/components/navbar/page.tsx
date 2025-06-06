@@ -1,6 +1,6 @@
 "use client";
 
-import { FaBars,FaUser } from "react-icons/fa";
+import { FaBars } from "react-icons/fa";
 
 export default function Navbar() {
 
