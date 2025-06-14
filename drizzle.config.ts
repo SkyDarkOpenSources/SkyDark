@@ -1,13 +1,16 @@
-import { config } from 'dotenv';
-import { defineConfig } from "drizzle-kit";
+import { defineConfig } from 'drizzle-kit'
+import { loadEnvConfig } from '@next/env'
 
-config({ path: '.env' });
+loadEnvConfig(process.cwd())
+
+if (!process.env.DATABASE_URL) {
+  throw new Error('DATABASE_URL must be a Neon postgres connection string')
+}
 
 export default defineConfig({
-  schema: "./src/schema.ts",
-  out: "./migrations",
-  dialect: "postgresql",
+  dialect: 'postgresql',
   dbCredentials: {
-    url: process.env.DATABASE_URL!,
+    url: process.env.DATABASE_URL,
   },
-});
+  schema: './src/schema.ts',
+})

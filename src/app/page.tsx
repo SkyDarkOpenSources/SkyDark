@@ -1,9 +1,12 @@
 
 
-export default function Menubar(){
-    return(
-        <div className="flex flex-col p-10">
-          <main></main>
-        </div>
-    );
+export default function Home(){
+  return(
+    <div className="p-10 flex flex-col">
+      <main className="flex flex-col items-center h-screen">
+        <div></div>
+        <div></div>
+      </main>
+    </div>
+  );
 }

@@ -18,7 +18,7 @@ export default function Navbar() {
                         <a href="">About</a>
                     </div>
                     <div className="lg:visible md:visible invisible flex justify-center items-center">
-                        <a href="">Contact</a>
+                        <a href="">Login/Signup</a>
                     </div>
                     <div className="lg:visible md:visible invisible flex justify-center items-center">
                         <a href="">Donate</a>
