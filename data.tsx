@@ -19,6 +19,22 @@ const founders = [
     },
 ]
 
+const FooterAbout = [
+    {
+        name: "Home",
+        link: "",
+    },
+    {
+        name: "About",
+        link: "",
+    },
+    {
+        name: "Mission/aim",
+        link: "",
+    },
+]
+
 export const data = {
     founders,
+    FooterAbout,
 }

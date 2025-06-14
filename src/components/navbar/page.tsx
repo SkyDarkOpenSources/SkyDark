@@ -10,7 +10,7 @@ export default function Navbar() {
                 SkyDark
             </div>
             <div className="flex flex-rows-2 text-xl font-sans gap-2 text-gray-100">
-                <div className="grid grid-cols-3 lg:visible md:visible gap-1">
+                <div className="flex flex-row-4 lg:visible md:visible gap-4">
                     <div className="lg:visible md:visible invisible flex justify-center items-center">
                         <a href="">Home</a>
                     </div>
@@ -19,6 +19,9 @@ export default function Navbar() {
                     </div>
                     <div className="lg:visible md:visible invisible flex justify-center items-center">
                         <a href="">Contact</a>
+                    </div>
+                    <div className="lg:visible md:visible invisible flex justify-center items-center">
+                        <a href="">Donate</a>
                     </div>
                 </div>
                 <div className="lg:hidden md:hidden visible"> 

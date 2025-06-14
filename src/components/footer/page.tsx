@@ -2,10 +2,9 @@
 
 import { FaInstagram, FaLinkedin, FaYoutube } from "react-icons/fa";
 
-
 export default function Footer() {
     return (
-        <footer className="grid grid-cols gap-3 p-10 bg-emerald-800 text-gray-200 rounded-t-3xl">
+        <footer className="grid grid-cols gap-3 p-10 bg-violet-600 text-gray-200 rounded-t-3xl">
             <div className="grid lg:grid-cols-3 md:grid-cols-3 p-5 gap-2">
                 <div className="flex flex-col gap-3 p-5 items-center">
                     <span className="text-4xl">About</span>
@@ -28,10 +27,10 @@ export default function Footer() {
                 <div className="flex flex-col gap-3 p-5 items-center text-lg">
                     <span className="text-4xl">Contact</span>
                     <div className="flex flex-col gap-2 items-start">
+                        <a href="" className="hover:underline">Career</a>
                         <a href="" className="hover:underline">Founders</a>
                         <a href="" className="hover:underline">Team</a>
-                        <a href="" className="hover:underline">Tech</a>
-                        <a href="" className="hover:underline">Career</a>
+                        <a href="" className="hover:underline">Donate</a>
                     </div>
                 </div>
             </div>
