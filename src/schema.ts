@@ -4,3 +4,8 @@ export const users = pgTable('users', {
   id: serial('id').primaryKey(),
   email: text('email').notNull().unique(),
 });
+
+export const employees = pgTable('employees', {
+  id: serial('id').primaryKey(),
+  email: text('email').notNull().unique(),
+});
