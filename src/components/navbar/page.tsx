@@ -1,10 +1,7 @@
 "use client";
 import {
-  ClerkProvider,
   SignInButton,
-  SignUpButton,
   SignedIn,
-  SignedOut,
   UserButton,
   useUser,
 } from '@clerk/nextjs'
@@ -12,7 +9,7 @@ import { FaBars } from "react-icons/fa";
 
 export default function Navbar() {
 
-    const { isSignedIn, user, isLoaded } = useUser();
+    const { isSignedIn } = useUser();
 
     if (!isSignedIn){
         return(
