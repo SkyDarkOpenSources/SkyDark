@@ -5,7 +5,6 @@ import {
   SignedOut,
   SignedIn,
   UserButton,
-  useUser,
 } from '@clerk/nextjs'
 import { FaBars } from "react-icons/fa";
 
