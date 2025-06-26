@@ -1,13 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
 import { ThemeProvider } from "@/components/theme-provider";
 import Navbar from "@/components/navbar";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { ClerkProvider } from '@clerk/nextjs';
 
 const geistMono = Geist_Mono({
