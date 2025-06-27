@@ -1,7 +1,7 @@
 "use client"
 import Image from "next/image"
 import * as React from "react"
-import { Search, Settings, Home, Users, BarChart3, Bell, HelpCircle } from "lucide-react"
+import { Search, Settings, Home, BarChart3, UserRound } from "lucide-react"
 import Link from "next/link"
 
 import {
@@ -39,15 +39,13 @@ const items = [
 
 const settingsItems = [
   {
-    title: "Settings",
-    url: "/dashboard/settings",
-    icon: Settings,
+    title: "Profile",
+    url: "/dashboard/profile",
+    icon: UserRound,
   },
 ]
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const [searchQuery, setSearchQuery] = React.useState("")
-
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
