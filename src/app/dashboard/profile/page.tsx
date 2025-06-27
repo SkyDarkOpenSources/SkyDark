@@ -1,14 +1,10 @@
-
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { CalendarDays, Mail, Clock } from "lucide-react";
 import { ToggleTheme } from "@/components/ui/ToggleTheme";
 import { AvatarUpload } from "@/components/AvatarUpload";
-import {
-  SignOutButton,
-} from '@clerk/nextjs'
+import { SettingsModal } from "@/components/SettingsModal";
 
 export default async function DashboardPage() {
   const { userId } = await auth();
@@ -27,17 +23,18 @@ export default async function DashboardPage() {
     });
   };
 
+  const userEmail = user?.emailAddresses.find(e => e.id === user.primaryEmailAddressId)?.emailAddress || "No email";
+  const userName = user?.fullName || "User";
+
   return (
     <div className="flex-1 space-y-6 p-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Profile</h1>
-          <p className="text-muted-foreground">Manage your profile</p>
+          <p className="text-muted-foreground">Manage your profile and settings</p>
         </div>
-        <Badge variant="secondary" className="text-md">
-          <SignOutButton />
-        </Badge>
+        <SettingsModal userEmail={userEmail} userName={userName} />
       </div>
 
       {/* User Profile Card */}
@@ -46,10 +43,10 @@ export default async function DashboardPage() {
           <div className="flex items-center space-x-4">
             <AvatarUpload />
             <div className="space-y-1">
-              <CardTitle className="text-2xl">{user?.fullName || "User"}</CardTitle>
+              <CardTitle className="text-2xl">{userName}</CardTitle>
               <CardDescription className="flex items-center">
                 <Mail className="mr-1 h-4 w-4" />
-                {user?.emailAddresses.find(e => e.id === user.primaryEmailAddressId)?.emailAddress}
+                {userEmail}
               </CardDescription>
             </div>
           </div>
@@ -89,22 +86,60 @@ export default async function DashboardPage() {
         </CardContent>
       </Card>
 
-      {/* Recent Activity */}
+      {/* Account Information */}
       <Card>
         <CardHeader>
           <CardTitle>Account Information</CardTitle>
-          <CardDescription>Manage your account details</CardDescription>
+          <CardDescription>Your account details and status</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="space-y-2">
+                <p className="text-sm font-medium">Full Name</p>
+                <p className="text-sm text-muted-foreground bg-muted/50 p-2 rounded">
+                  {userName}
+                </p>
+              </div>
+              <div className="space-y-2">
                 <p className="text-sm font-medium">Email Address</p>
-                <p className="text-sm text-muted-foreground">
-                  {user?.emailAddresses.find(e => e.id === user.primaryEmailAddressId)?.emailAddress}
+                <p className="text-sm text-muted-foreground bg-muted/50 p-2 rounded">
+                  {userEmail}
                 </p>
               </div>
             </div>
+            
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="space-y-2">
+                <p className="text-sm font-medium">User ID</p>
+                <p className="text-sm text-muted-foreground bg-muted/50 p-2 rounded font-mono">
+                  {user?.id}
+                </p>
+              </div>
+              <div className="space-y-2">
+                <p className="text-sm font-medium">Account Status</p>
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <p className="text-sm text-muted-foreground">Active</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Quick Actions */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Quick Actions</CardTitle>
+          <CardDescription>Common profile management tasks</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="text-sm text-muted-foreground">
+            <p>• Use the <strong>Settings</strong> button above to access all account management options</p>
+            <p>• Update your profile picture by clicking on your avatar</p>
+            <p>• Toggle between light and dark themes using the theme switcher</p>
+            <p>• Visit the Search page to find and connect with other users</p>
           </div>
         </CardContent>
       </Card>
