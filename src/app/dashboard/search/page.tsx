@@ -17,7 +17,7 @@ interface UserResult {
   createdAt: number;
 }
 
-// Debounce function
+// Debounce function with proper typing
 function debounce<T extends (...args: any[]) => any>(
   func: T,
   wait: number
@@ -59,7 +59,7 @@ export default function SearchPage() {
       const response = await fetch(`/api/users/search?q=${encodeURIComponent(query)}`);
       
       if (response.ok) {
-        const users = await response.json();
+        const users: UserResult[] = await response.json();
         setSearchResults(users);
       } else {
         console.error("Search failed");

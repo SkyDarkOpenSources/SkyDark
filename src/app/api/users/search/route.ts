@@ -1,6 +1,20 @@
 // File: app/api/users/search/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { currentUser, clerkClient } from "@clerk/nextjs/server";
+import type { User, EmailAddress } from "@clerk/nextjs/server";
+
+interface UserResult {
+  id: string;
+  fullName: string;
+  emailAddress: string;
+  imageUrl?: string;
+  createdAt: number;
+}
+
+interface ClerkUserWithEmail extends User {
+  emailAddresses: EmailAddress[];
+  primaryEmailAddressId: string | null;
+}
 
 export async function GET(request: NextRequest) {
   try {
@@ -21,7 +35,7 @@ export async function GET(request: NextRequest) {
 
     // Fetch users from Clerk
     const clerk = await clerkClient();
-    let allUsers: any[] = [];
+    const allUsers: ClerkUserWithEmail[] = [];
     let hasNextPage = true;
     let offset = 0;
     const limit = 100;
@@ -35,7 +49,7 @@ export async function GET(request: NextRequest) {
         });
 
         if (usersResponse.data && usersResponse.data.length > 0) {
-          allUsers.push(...usersResponse.data);
+          allUsers.push(...(usersResponse.data as ClerkUserWithEmail[]));
           offset += limit;
           
           // Check if we have more users (if we got less than limit, we're done)
@@ -52,8 +66,8 @@ export async function GET(request: NextRequest) {
     // Filter users based on search query and exclude current user
     const searchTerm = query.toLowerCase();
     const filteredUsers = allUsers
-      .filter((clerkUser: any) => clerkUser.id !== user.id) // Exclude current user
-      .filter((clerkUser: any) => {
+      .filter((clerkUser: ClerkUserWithEmail) => clerkUser.id !== user.id) // Exclude current user
+      .filter((clerkUser: ClerkUserWithEmail) => {
         // Search in multiple fields
         const fullName = (clerkUser.fullName || '').toLowerCase();
         const firstName = (clerkUser.firstName || '').toLowerCase();
@@ -61,7 +75,7 @@ export async function GET(request: NextRequest) {
         
         // Get email address
         const primaryEmail = clerkUser.emailAddresses?.find(
-          (email: any) => email.id === clerkUser.primaryEmailAddressId
+          (email: EmailAddress) => email.id === clerkUser.primaryEmailAddressId
         );
         const emailAddress = (primaryEmail?.emailAddress || '').toLowerCase();
         
@@ -76,10 +90,10 @@ export async function GET(request: NextRequest) {
       .slice(0, 20); // Limit results to 20 for UI performance
 
     // Transform the user data to match frontend interface
-    const searchResults = filteredUsers.map((clerkUser: any) => {
+    const searchResults: UserResult[] = filteredUsers.map((clerkUser: ClerkUserWithEmail) => {
       // Get primary email address
       const primaryEmail = clerkUser.emailAddresses?.find(
-        (email: any) => email.id === clerkUser.primaryEmailAddressId
+        (email: EmailAddress) => email.id === clerkUser.primaryEmailAddressId
       );
       
       // Fallback to first email if no primary email

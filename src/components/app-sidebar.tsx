@@ -1,7 +1,7 @@
 "use client"
 import Image from "next/image"
 import * as React from "react"
-import { Search, Settings, Home, BarChart3, UserRound } from "lucide-react"
+import { Search, Home, BarChart3, UserRound } from "lucide-react"
 import Link from "next/link"
 
 import {

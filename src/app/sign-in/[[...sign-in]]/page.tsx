@@ -10,6 +10,15 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 
+interface ClerkError {
+  message: string;
+  code: string;
+}
+
+interface SignInError {
+  errors: ClerkError[];
+}
+
 export default function SignInPage() {
   const { isLoaded, signIn, setActive } = useSignIn();
   const [email, setEmail] = useState("");
@@ -33,8 +42,9 @@ export default function SignInPage() {
         await setActive({ session: result.createdSessionId });
         router.push("/dashboard");
       }
-    } catch (err: any) {
-      toast.error(err.errors[0]?.message || "Sign in failed");
+    } catch (err) {
+      const error = err as SignInError;
+      toast.error(error.errors?.[0]?.message || "Sign in failed");
     } finally {
       setIsLoading(false);
     }
