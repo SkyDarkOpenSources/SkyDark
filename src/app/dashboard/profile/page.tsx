@@ -111,12 +111,6 @@ export default async function DashboardPage() {
             
             <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-2">
-                <p className="text-sm font-medium">User ID</p>
-                <p className="text-sm text-muted-foreground bg-muted/50 p-2 rounded font-mono">
-                  {user?.id}
-                </p>
-              </div>
-              <div className="space-y-2">
                 <p className="text-sm font-medium">Account Status</p>
                 <div className="flex items-center space-x-2">
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
