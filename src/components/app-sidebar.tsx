@@ -35,16 +35,6 @@ const items = [
     url: "/dashboard/posts",
     icon: BarChart3,
   },
-  {
-    title: "Users",
-    url: "/dashboard/users",
-    icon: Users,
-  },
-  {
-    title: "Analytics",
-    url: "/dashboard/analytics",
-    icon: Bell,
-  },
 ]
 
 const settingsItems = [
