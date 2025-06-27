@@ -1,6 +1,11 @@
 import Navbar from "@/components/navbar"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import {
+  SignUpButton,
+  SignedIn,
+  SignedOut,
+} from '@clerk/nextjs'
 
 export default function Home() {
   return (
@@ -32,13 +37,25 @@ export default function Home() {
 
           {/* CTA Button */}
           <div className="pt-4">
-            <Button
-              size="lg"
-              className="text-lg px-8 py-6 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 transform hover:scale-105"
-              asChild
-            >
-              <Link href="/get-started">Get Started</Link>
-            </Button>
+            <SignedIn>
+              <Button
+                size="lg"
+                className="text-lg px-8 py-6 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 transform hover:scale-105"
+                asChild
+              >
+                <Link href="/dashboard">Go to Dashboard</Link>
+              </Button>
+            </SignedIn>
+            <SignedOut>
+              <SignUpButton>
+                <Button
+                  size="lg"
+                  className="text-lg px-8 py-6 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 transform hover:scale-105"
+                >
+                  Get Started
+                </Button>
+              </SignUpButton>
+            </SignedOut>
           </div>
 
           {/* Additional elements */}

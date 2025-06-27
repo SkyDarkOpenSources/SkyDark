@@ -11,6 +11,12 @@ import {
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Menu } from "lucide-react"
 import { ToggleTheme } from "@/components/ui/ToggleTheme"
+import {
+  SignInButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from '@clerk/nextjs'
 
 export default function Navbar() {
   return (
@@ -64,9 +70,16 @@ export default function Navbar() {
 
           {/* Right - Sign In & Theme Toggle (Desktop) */}
           <div className="hidden md:flex items-center space-x-4">
-            <Button variant="ghost" asChild>
-              <Link href="/signin">Sign In</Link>
-            </Button>
+            <SignedOut>
+            <SignInButton>
+              <Button variant="outline" className="bg-transparent">
+                Sign In
+              </Button>
+            </SignInButton>
+            </SignedOut>
+            <SignedIn>
+            <UserButton />
+            </SignedIn>
             <ToggleTheme />
           </div>
 
