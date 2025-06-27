@@ -18,7 +18,7 @@ interface UserResult {
 }
 
 // Debounce function with proper typing
-function debounce<T extends (...args: any[]) => any>(
+function debounce<T extends (...args: never[]) => void | Promise<void>>(
   func: T,
   wait: number
 ): (...args: Parameters<T>) => void {
