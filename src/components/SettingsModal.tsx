@@ -29,7 +29,7 @@ interface SettingsModalProps {
   userName: string;
 }
 
-export function SettingsModal({ userEmail, userName }: SettingsModalProps) {
+export function SettingsModal({ userEmail }: SettingsModalProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const { user } = useUser();
