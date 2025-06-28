@@ -148,8 +148,8 @@ export function SettingsModal({ userEmail, userName }: SettingsModalProps) {
             <CardContent className="space-y-3">
               <div className="flex items-center justify-between">
                 <div>
-                  <Label className="text-sm font-medium">Name</Label>
-                  <p className="text-sm text-muted-foreground">{userName}</p>
+                  <Label className="text-sm font-medium">User Name</Label>
+                  <p className="text-sm text-muted-foreground">{user?.username}</p>
                 </div>
               </div>
               <div className="flex items-center justify-between">

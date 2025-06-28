@@ -1,4 +1,5 @@
 import { auth, currentUser } from "@clerk/nextjs/server";
+import { useUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { CalendarDays, Mail, Clock } from "lucide-react";
@@ -43,7 +44,7 @@ export default async function DashboardPage() {
           <div className="flex items-center space-x-4">
             <AvatarUpload />
             <div className="space-y-1">
-              <CardTitle className="text-2xl">{userName}</CardTitle>
+              <CardTitle className="text-2xl">{user?.username}</CardTitle>
               <CardDescription className="flex items-center">
                 <Mail className="mr-1 h-4 w-4" />
                 {userEmail}
@@ -80,42 +81,6 @@ export default async function DashboardPage() {
                 <p className="text-xs text-muted-foreground">
                   {user?.updatedAt ? formatDate(user.updatedAt) : "Unknown"}
                 </p>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Account Information */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Account Information</CardTitle>
-          <CardDescription>Your account details and status</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-2">
-                <p className="text-sm font-medium">Full Name</p>
-                <p className="text-sm text-muted-foreground bg-muted/50 p-2 rounded">
-                  {userName}
-                </p>
-              </div>
-              <div className="space-y-2">
-                <p className="text-sm font-medium">Email Address</p>
-                <p className="text-sm text-muted-foreground bg-muted/50 p-2 rounded">
-                  {userEmail}
-                </p>
-              </div>
-            </div>
-            
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-2">
-                <p className="text-sm font-medium">Account Status</p>
-                <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <p className="text-sm text-muted-foreground">Active</p>
-                </div>
               </div>
             </div>
           </div>
