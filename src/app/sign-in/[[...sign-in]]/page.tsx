@@ -1,7 +1,6 @@
 "use client";
 
 import { useSignIn } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -9,7 +8,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
-import { Icons } from "@/components/icons";
 
 export default function SignInPage() {
   const { isLoaded, signIn, setActive } = useSignIn();
@@ -18,7 +16,13 @@ export default function SignInPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [isMicrosoftLoading, setIsMicrosoftLoading] = useState(false);
-  const router = useRouter();
+
+  // Custom loading spinner component
+  const Spinner = () => (
+    <div className="inline-block mr-2 h-4 w-4 animate-spin rounded-full border-2 border-solid border-current border-r-transparent">
+      <span className="sr-only">Loading...</span>
+    </div>
+  );
 
   // Email/password sign in
   const handleSubmit = async (e: React.FormEvent) => {
@@ -35,7 +39,7 @@ export default function SignInPage() {
 
       if (result.status === "complete") {
         await setActive({ session: result.createdSessionId });
-        // Immediate redirect without delay
+        // Immediate redirect without using router
         window.location.href = "/dashboard";
       }
     } catch (err) {
@@ -60,7 +64,7 @@ export default function SignInPage() {
       await signIn.authenticateWithRedirect({
         strategy: `oauth_${provider}`,
         redirectUrl: "/sso-callback",
-        redirectUrlComplete: "/dashboard", // Immediate redirect after success
+        redirectUrlComplete: "/dashboard",
       });
     } catch (err) {
       const error = err as { errors: { message: string }[] };
@@ -92,9 +96,9 @@ export default function SignInPage() {
               disabled={isGoogleLoading || isLoading}
             >
               {isGoogleLoading ? (
-                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                <Spinner />
               ) : (
-                <Icons.google className="mr-2 h-4 w-4" />
+                <span className="mr-2">G</span>
               )}
               Google
             </Button>
@@ -104,9 +108,9 @@ export default function SignInPage() {
               disabled={isMicrosoftLoading || isLoading}
             >
               {isMicrosoftLoading ? (
-                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                <Spinner />
               ) : (
-                <Icons.microsoft className="mr-2 h-4 w-4" />
+                <span className="mr-2">M</span>
               )}
               Microsoft
             </Button>
@@ -148,9 +152,7 @@ export default function SignInPage() {
               />
             </div>
             <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? (
-                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-              ) : null}
+              {isLoading ? <Spinner /> : null}
               Sign In
             </Button>
           </form>
