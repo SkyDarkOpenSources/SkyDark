@@ -57,8 +57,8 @@ export function AvatarUpload() {
         )}
       </div>
       <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-        <div className="text-center p-2 rounded-lg bg-black/70 text-white">
-          <Upload className="mx-auto h-6 w-6 mb-1" />
+        <div className="text-center p-2 rounded-[62px] bg-black/70 text-white">
+          <Upload className="mx-auto h-16 w-16 mb-1" />
           <span className="text-xs">Change profile photo</span>
         </div>
       </div>

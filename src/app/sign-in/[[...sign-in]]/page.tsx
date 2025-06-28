@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
+import { Icons } from "@/components/icons";
 
 interface ClerkError {
   message: string;
@@ -24,6 +25,8 @@ export default function SignInPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [isMicrosoftLoading, setIsMicrosoftLoading] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -50,6 +53,33 @@ export default function SignInPage() {
     }
   };
 
+  const handleOAuthSignIn = async (provider: "google" | "microsoft") => {
+    if (!isLoaded) return;
+
+    try {
+      if (provider === "google") {
+        setIsGoogleLoading(true);
+      } else {
+        setIsMicrosoftLoading(true);
+      }
+
+      await signIn.authenticateWithRedirect({
+        strategy: `oauth_${provider}`,
+        redirectUrl: "/sso-callback",
+        redirectUrlComplete: "/dashboard",
+      });
+    } catch (err) {
+      const error = err as SignInError;
+      toast.error(error.errors?.[0]?.message || `Sign in with ${provider} failed`);
+    } finally {
+      if (provider === "google") {
+        setIsGoogleLoading(false);
+      } else {
+        setIsMicrosoftLoading(false);
+      }
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-4">
       <Card className="w-full max-w-md">
@@ -60,6 +90,42 @@ export default function SignInPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
+          <div className="grid grid-cols-2 gap-2 mb-6">
+            <Button
+              variant="outline"
+              onClick={() => handleOAuthSignIn("google")}
+              disabled={isGoogleLoading || isLoading}
+            >
+              {isGoogleLoading ? (
+                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <Icons.google className="mr-2 h-4 w-4" />
+              )}
+              Google
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => handleOAuthSignIn("microsoft")}
+              disabled={isMicrosoftLoading || isLoading}
+            >
+              {isMicrosoftLoading ? (
+                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <Icons.microsoft className="mr-2 h-4 w-4" />
+              )}
+              Microsoft
+            </Button>
+          </div>
+          <div className="relative mb-6">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-background px-2 text-muted-foreground">
+                Or continue with
+              </span>
+            </div>
+          </div>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
@@ -84,7 +150,10 @@ export default function SignInPage() {
               />
             </div>
             <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Signing in..." : "Sign In"}
+              {isLoading ? (
+                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+              ) : null}
+              Sign In
             </Button>
           </form>
           <div className="mt-4 text-center text-sm">
