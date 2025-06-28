@@ -9,7 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@clerk/backend": "^2.3.0",
     "@clerk/nextjs": "^6.23.1",
+    "@clerk/themes": "^2.2.52",
     "@hookform/resolvers": "^5.1.1",
     "@material-tailwind/react": "^2.1.10",
     "@neondatabase/serverless": "^1.0.1",
@@ -34,6 +36,7 @@
     "lucide-react": "^0.511.0",
     "next": "15.3.3",
     "next-themes": "^0.4.6",
+    "postgres": "^3.4.7",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-hook-form": "^7.58.1",
@@ -52,7 +55,7 @@
     "@types/react": "19.1.8",
     "@types/react-dom": "19.1.6",
     "@types/ws": "^8.18.1",
-    "drizzle-kit": "^0.31.1",
+    "drizzle-kit": "^0.31.4",
     "eslint": "^9",
     "eslint-config-next": "15.3.3",
     "postcss": "^8",
