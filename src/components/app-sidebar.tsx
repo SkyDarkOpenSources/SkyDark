@@ -31,8 +31,8 @@ const items = [
     icon: Search,
   },
   {
-    title: "Posts",
-    url: "/dashboard/posts",
+    title: "News",
+    url: "/dashboard/news",
     icon: BarChart3,
   },
 ]

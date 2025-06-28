@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/navigation-menu"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Menu } from "lucide-react"
-import { ToggleTheme } from "@/components/ui/ToggleTheme"
 import {
   SignInButton,
   SignedIn,
@@ -25,7 +24,7 @@ export default function Navbar() {
         <div className="flex h-16 items-center justify-between">
           {/* Left - Logo */}
           <div className="flex items-center">
-            <Link href="/" className="text-xl font-bold text-foreground hover:text-foreground/80 transition-colors">
+            <Link href="/" className="text-xl font-sans text-foreground hover:text-foreground/80 transition-colors">
               SkyDark
             </Link>
           </div>
@@ -80,12 +79,10 @@ export default function Navbar() {
             <SignedIn>
             <UserButton />
             </SignedIn>
-            <ToggleTheme />
           </div>
 
           {/* Mobile Menu */}
           <div className="md:hidden flex items-center space-x-2">
-            <ToggleTheme />
             <Sheet>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon">
