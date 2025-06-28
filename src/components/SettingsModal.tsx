@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUser, useClerk } from "@clerk/nextjs";
 import { Settings, User, Mail, Lock, LogOut, Trash2, Shield, Bell, Eye } from "lucide-react";
@@ -22,7 +23,6 @@ import {
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
-import { useState } from "react";
 
 interface SettingsModalProps {
   userEmail: string;
@@ -41,8 +41,9 @@ export function SettingsModal({ userEmail, userName }: SettingsModalProps) {
     try {
       await signOut();
       router.push("/sign-in");
-    } catch (error) {
+    } catch (err) {
       toast.error("Failed to sign out. Please try again.");
+      console.error("Sign out error:", err);
     } finally {
       setIsLoading(false);
     }
@@ -59,8 +60,9 @@ export function SettingsModal({ userEmail, userName }: SettingsModalProps) {
       await user?.delete();
       toast.success("Account deleted successfully");
       router.push("/");
-    } catch (error) {
+    } catch (err) {
       toast.error("Failed to delete account. Please try again.");
+      console.error("Delete account error:", err);
     } finally {
       setIsLoading(false);
       setShowDeleteConfirm(false);
@@ -138,6 +140,7 @@ export function SettingsModal({ userEmail, userName }: SettingsModalProps) {
         </DialogHeader>
 
         <div className="space-y-6">
+          {/* User Info Section */}
           <Card>
             <CardHeader className="pb-3">
               <CardTitle className="text-lg">Account Overview</CardTitle>
@@ -158,6 +161,7 @@ export function SettingsModal({ userEmail, userName }: SettingsModalProps) {
             </CardContent>
           </Card>
 
+          {/* Settings Options */}
           <div className="space-y-2">
             <h3 className="text-sm font-medium text-muted-foreground mb-3">Settings</h3>
             {settingsItems.map((item, index) => (
@@ -178,9 +182,11 @@ export function SettingsModal({ userEmail, userName }: SettingsModalProps) {
 
           <Separator />
 
+          {/* Danger Zone */}
           <div className="space-y-4">
             <h3 className="text-sm font-medium text-red-600 dark:text-red-400">Danger Zone</h3>
             
+            {/* Sign Out */}
             <Button
               variant="outline"
               className="w-full justify-start h-auto p-4 border-orange-200 hover:bg-orange-50 hover:border-orange-300 dark:border-orange-800 dark:hover:bg-orange-900/20"
@@ -194,6 +200,7 @@ export function SettingsModal({ userEmail, userName }: SettingsModalProps) {
               </div>
             </Button>
 
+            {/* Delete Account */}
             <Button
               variant="outline"
               className="w-full justify-start h-auto p-4 border-red-200 hover:bg-red-50 hover:border-red-300 dark:border-red-800 dark:hover:bg-red-900/20"
