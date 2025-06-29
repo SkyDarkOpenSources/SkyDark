@@ -1,117 +1,173 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
+import { UserButton, useUser, useClerk } from "@clerk/nextjs";
+import Link from "next/link";
 import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-} from "@/components/ui/navigation-menu"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { Menu } from "lucide-react"
-import {
-  SignInButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from '@clerk/nextjs'
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { LogOut, ImageIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState, useRef } from "react";
+import { toast } from "sonner";
 
-export default function Navbar() {
+export function Navbar() {
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/40">
-      <div className="container mx-auto px-4">
-        <div className="flex h-16 items-center justify-between">
+    <nav className="fixed top-0 w-full z-50 bg-gradient-to-r from-sky-900 to-gray-900 text-white shadow-lg">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
           {/* Left - Logo */}
-          <div className="flex items-center">
-            <Link href="/" className="text-xl font-sans text-foreground hover:text-foreground/80 transition-colors">
-              SkyDark
+          <div className="flex-shrink-0 flex items-center">
+            <Link href="/" className="text-2xl font-bold tracking-tight">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-sky-400 to-blue-200">
+                SkyDark
+              </span>
             </Link>
           </div>
 
-          {/* Middle - Navigation (Desktop) */}
-          <div className="hidden md:flex items-center justify-center flex-1">
-            <NavigationMenu>
-              <NavigationMenuList className="flex space-x-6">
-                <NavigationMenuItem>
-                  <NavigationMenuLink asChild>
-                    <Link
-                      href="/"
-                      className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
-                    >
-                      Home
-                    </Link>
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                  <NavigationMenuLink asChild>
-                    <Link
-                      href="/about"
-                      className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
-                    >
-                      About
-                    </Link>
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                  <NavigationMenuLink asChild>
-                    <Link
-                      href="/learn-more"
-                      className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
-                    >
-                      LearnMore
-                    </Link>
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-              </NavigationMenuList>
-            </NavigationMenu>
+          {/* Center - Navigation Links */}
+          <div className="hidden md:block">
+            <div className="ml-10 flex items-center space-x-8">
+              <Link
+                href="/"
+                className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+              >
+                Home
+              </Link>
+              <Link
+                href="/about"
+                className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+              >
+                About
+              </Link>
+              <Link
+                href="/learn-more"
+                className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+              >
+                Learn More
+              </Link>
+            </div>
           </div>
 
-          {/* Right - Sign In & Theme Toggle (Desktop) */}
-          <div className="hidden md:flex items-center space-x-4">
-            <SignedOut>
-            <SignInButton>
-              <Button variant="outline" className="bg-transparent">
-                Sign In
-              </Button>
-            </SignInButton>
-            </SignedOut>
-            <SignedIn>
-            <UserButton />
-            </SignedIn>
-          </div>
-
-          {/* Mobile Menu */}
-          <div className="md:hidden flex items-center space-x-2">
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="icon">
-                  <Menu className="h-5 w-5" />
-                  <span className="sr-only">Toggle menu</span>
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="right" className="w-[300px] sm:w-[400px]">
-                <div className="flex flex-col space-y-4 mt-8">
-                  <Link href="/" className="text-lg font-medium hover:text-foreground/80 transition-colors">
-                    Home
-                  </Link>
-                  <Link href="/about" className="text-lg font-medium hover:text-foreground/80 transition-colors">
-                    About
-                  </Link>
-                  <Link href="/learn-more" className="text-lg font-medium hover:text-foreground/80 transition-colors">
-                    LearnMore
-                  </Link>
-                  <div className="pt-4 border-t">
-                    <Button variant="outline" className="w-full bg-transparent" asChild>
-                      <Link href="/signin">Sign In</Link>
-                    </Button>
-                  </div>
-                </div>
-              </SheetContent>
-            </Sheet>
+          {/* Right - User Profile Dropdown */}
+          <div className="ml-4 flex items-center md:ml-6">
+            <UserProfileDropdown />
           </div>
         </div>
       </div>
-    </header>
-  )
+    </nav>
+  );
+}
+
+function UserProfileDropdown() {
+  const { user } = useUser();
+  const { signOut } = useClerk();
+  const router = useRouter();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isUploading, setIsUploading] = useState(false);
+
+  const handleSignOut = async () => {
+    await signOut();
+    router.push("/");
+  };
+
+  const handleProfilePictureChange = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+
+    // Validate file type
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please upload an image file (JPEG, PNG, etc.)");
+      return;
+    }
+
+    // Validate file size (5MB max)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("File size too large (max 5MB)");
+      return;
+    }
+
+    setIsUploading(true);
+
+    try {
+      // Use Clerk's built-in method to update profile picture
+      await user.setProfileImage({ file });
+      toast.success("Profile picture updated successfully!");
+    } catch (error) {
+      console.error("Error updating profile picture:", error);
+      toast.error("Failed to update profile picture");
+    } finally {
+      setIsUploading(false);
+      // Reset the file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }
+  };
+
+  if (!user) return null;
+
+  return (
+    <>
+      {/* Hidden file input for profile picture upload */}
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleFileChange}
+        accept="image/*"
+        className="hidden"
+      />
+      
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="rounded-full hover:bg-sky-800/50 focus:ring-2 focus:ring-sky-500"
+          >
+            <UserButton
+              afterSignOutUrl="/"
+              appearance={{
+                elements: {
+                  userButtonAvatarBox: "h-8 w-8",
+                  userButtonPopoverActionButtonIcon: "hidden",
+                  userButtonPopoverActionButtonText: "text-xs",
+                  userButtonPopoverFooter: "hidden",
+                },
+              }}
+            />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent
+          align="end"
+          className="bg-gray-800 border-gray-700 text-white w-48"
+        >
+          <DropdownMenuItem 
+            className="hover:bg-gray-700 focus:bg-gray-700 cursor-pointer"
+            onClick={handleProfilePictureChange}
+            disabled={isUploading}
+          >
+            <ImageIcon className="mr-2 h-4 w-4" />
+            <span>
+              {isUploading ? "Uploading..." : "Change Profile Picture"}
+            </span>
+          </DropdownMenuItem>
+          <DropdownMenuItem 
+            className="hover:bg-gray-700 focus:bg-gray-700 cursor-pointer"
+            onClick={handleSignOut}
+          >
+            <LogOut className="mr-2 h-4 w-4" />
+            <span>Logout</span>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </>
+  );
 }
