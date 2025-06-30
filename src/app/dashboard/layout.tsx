@@ -3,6 +3,41 @@ import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/s
 import { AppSidebar } from "@/components/app-sidebar"
 import { Separator } from "@/components/ui/separator"
 import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbPage } from "@/components/ui/breadcrumb"
+import { Metadata } from "next"
+
+export const metadata: Metadata = {
+  title: "SkyDark | Dashboard",
+  description:
+    "SkyDark dashboard. View upcoming events, news, profile, search for other users. Manage your account and explore the world of space-tech and beyond.",
+  openGraph: {
+    title: "SkyDark",
+    description:
+      "SkyDark dashboard. View upcoming events, news, profile, search for other users. Manage your account and explore the world of space-tech and beyond.",
+    url: "https://www.skydark.net/dashboard",
+    siteName: "SkyDark",
+    type: "website",
+    locale: "en_US",
+    images: [
+      {
+        url: "/favicon.ico",
+        width: 1200,
+        height: 630,
+      },
+    ],
+  },
+  twitter: {
+    title: "SkyDark",
+    description:
+      "SkyDark dashboard. View upcoming events, news, profile, search for other users. Manage your account and explore the world of space-tech and beyond.",
+    images: [
+      {
+        url: "/favicon.ico",
+        width: 1200,
+        height: 630,
+      },
+    ],
+  },
+};
 
 export default function DashboardLayout({
   children,
