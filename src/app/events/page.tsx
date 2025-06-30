@@ -108,6 +108,26 @@ export default function EventsPage() {
           )}
         </div>
       </section>
+
+      {/* CTA Section */}
+      <section className="py-16 bg-gradient-to-r from-blue-900 to-purple-900">
+        <div className="container mx-auto px-6 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">Stay Updated</h2>
+          <p className="text-xl mb-8 max-w-2xl mx-auto">
+            Subscribe to get notifications about upcoming events
+          </p>
+          <div className="max-w-md mx-auto flex gap-2">
+            <input 
+              type="email" 
+              placeholder="Your email address" 
+              className="flex-1 px-4 py-3 rounded-lg bg-white/10 border border-white/20 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+            <button className="px-6 py-3 bg-white text-gray-900 rounded-lg font-medium hover:bg-gray-100 transition-colors">
+              Subscribe
+            </button>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
