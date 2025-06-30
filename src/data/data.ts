@@ -27,7 +27,7 @@ export const Events = [
         description: "Join us for our first workshop in qatar where we will showcase our latest website and how to use it effectively.",
         link: "/events",
         image: "/images/events/workshop.jpg", // Add image path
-        location: "Qatar Innovation Center", // Add location
+        location: "Online", // Add location
         category: "workshop" // Add category
     },
 ];

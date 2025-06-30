@@ -5,7 +5,7 @@ import { Events } from "@/data/data";
 import { Calendar, MapPin, ArrowRight, Rocket } from "lucide-react";
 import { Navbar } from "@/components/navbar";
 
-interface Event {
+interface Events {
   name: string;
   date: string;
   description: string;
