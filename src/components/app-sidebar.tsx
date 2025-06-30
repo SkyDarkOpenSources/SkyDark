@@ -1,7 +1,7 @@
 "use client"
 import Image from "next/image"
 import * as React from "react"
-import { Search, Home, BarChart3, UserRound } from "lucide-react"
+import { Search, Home, UserRound, NewspaperIcon } from "lucide-react"
 import Link from "next/link"
 
 import {
@@ -31,9 +31,9 @@ const items = [
     icon: Search,
   },
   {
-    title: "News",
-    url: "/dashboard/news",
-    icon: BarChart3,
+    title: "Events",
+    url: "/dashboard/events",
+    icon: NewspaperIcon,
   },
 ]
 

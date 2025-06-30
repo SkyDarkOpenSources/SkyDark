@@ -44,6 +44,12 @@ export function Navbar() {
                 About
               </Link>
               <Link
+                href="/events"
+                className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+              >
+                Events
+              </Link>
+              <Link
                 href="/learn-more"
                 className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
               >
