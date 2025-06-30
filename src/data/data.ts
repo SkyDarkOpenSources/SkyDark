@@ -23,10 +23,12 @@ export const founders = [
 export const Events = [
     {
         name: "SkyDark Workshop",
-        date: "2025-07-04",
-        description:
-            "Join us for our first workshop in qatar where we will showcase our latest website and how to use it effectively. Join us on this amazing workshop where we teach you about SkyDark, basic aerodynamics, etc.",
+        date: "2025-07-04T14:00:00", // Added time
+        description: "Join us for our first workshop in qatar where we will showcase our latest website and how to use it effectively.",
         link: "/events",
+        image: "/images/events/workshop.jpg", // Add image path
+        location: "Qatar Innovation Center", // Add location
+        category: "workshop" // Add category
     },
 ];
 
