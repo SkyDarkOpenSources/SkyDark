@@ -136,7 +136,7 @@ function UserProfileDropdown() {
               afterSignOutUrl="/"
               appearance={{
                 elements: {
-                  userButtonAvatarBox: "h-8 w-8",
+                  userButtonAvatarBox: "h-10 w-10",
                   userButtonPopoverActionButtonIcon: "hidden",
                   userButtonPopoverActionButtonText: "text-xs",
                   userButtonPopoverFooter: "hidden",
