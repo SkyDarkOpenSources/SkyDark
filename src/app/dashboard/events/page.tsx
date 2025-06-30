@@ -88,19 +88,6 @@ export default function EventsPage() {
                   </p>
                 </div>
               </div>
-              
-              <DialogFooter>
-                <Button asChild>
-                  <a 
-                    href={selectedEvent.link} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="w-full"
-                  >
-                    Visit Event Page
-                  </a>
-                </Button>
-              </DialogFooter>
             </>
           )}
         </DialogContent>

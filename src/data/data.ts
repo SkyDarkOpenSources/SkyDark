@@ -28,7 +28,7 @@ export const Events = [
         link: "/events",
         image: "/images/events/workshop.jpg", // Add image path
         location: "Online", // Add location
-        category: "workshop" // Add category
+        category: "Workshop" // Add category
     },
 ];
 

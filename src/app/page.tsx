@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import {
   SignedIn,
+  SignedOut
 } from '@clerk/nextjs'
 
 export default function Home() {
@@ -44,6 +45,15 @@ export default function Home() {
                 <Link href="/dashboard">Go to Dashboard</Link>
               </Button>
             </SignedIn>
+            <SignedOut>
+              <Button
+                size="lg"
+                className="text-lg px-8 py-6 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 transform hover:scale-105"
+                asChild
+              >
+                <Link href="/sign-in">Sign In</Link>
+              </Button>
+            </SignedOut>
           </div>
 
           {/* Additional elements */}

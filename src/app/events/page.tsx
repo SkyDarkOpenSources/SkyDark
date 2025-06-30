@@ -4,17 +4,22 @@
 import { Events } from "@/data/data";
 import { Calendar, MapPin, ArrowRight, Rocket } from "lucide-react";
 import { Navbar } from "@/components/navbar";
+import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 interface Events {
   name: string;
   date: string;
   description: string;
   link: string;
-  image?: string; // Optional property
-  location?: string; // Optional property
+  image?: string;
+  location?: string;
 }
 
 export default function EventsPage() {
+  const { isSignedIn } = useUser();
+  const router = useRouter();
+
   // Format date function
   const formatDate = (dateString: string) => {
     const options: Intl.DateTimeFormatOptions = { 
@@ -27,9 +32,19 @@ export default function EventsPage() {
     return new Date(dateString).toLocaleDateString('en-US', options);
   };
 
+  // Handle click event for Learn More button
+  const handleLearnMoreClick = (eventLink: string) => {
+    if (isSignedIn) {
+      router.push('/dashboard/events');
+    } else {
+      router.push('/sign-in');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-900 text-white">
-        <Navbar />
+      <Navbar />
+      
       {/* Hero Section */}
       <section className="relative py-32 bg-[url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1200&auto=format&fit=crop')] bg-cover bg-center">
         <div className="absolute inset-0 bg-black/60"></div>
@@ -57,22 +72,11 @@ export default function EventsPage() {
                   className="bg-gray-800 rounded-xl overflow-hidden hover:shadow-lg hover:shadow-blue-500/20 transition-all"
                 >
                   {/* Event image with fallback */}
-                  <div className="h-48 overflow-hidden bg-gradient-to-br from-blue-900 to-purple-900 flex items-center justify-center">
-                    {event.image ? (
-                      <img 
-                        src={event.image} 
-                        alt={event.name}
-                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                      />
-                    ) : (
-                      <Rocket size={48} className="text-white opacity-30" />
-                    )}
-                  </div>
                   
                   <div className="p-6">
                     <div className="flex items-center gap-2 text-blue-400 mb-2">
                       <Rocket size={16} />
-                      <span className="text-sm font-medium">Workshop</span>
+                      <span className="text-sm font-medium">{event.category}</span>
                     </div>
                     
                     <h3 className="text-xl font-bold mb-2">{event.name}</h3>
@@ -91,37 +95,17 @@ export default function EventsPage() {
                       )}
                     </div>
                     
-                    <a
-                      href={event.link}
+                    <button
+                      onClick={() => handleLearnMoreClick(event.link)}
                       className="mt-6 w-full py-2 bg-blue-600 hover:bg-blue-700 rounded-lg flex items-center justify-center gap-2 transition-colors"
                     >
                       Learn More <ArrowRight size={16} />
-                    </a>
+                    </button>
                   </div>
                 </div>
               ))}
             </div>
           )}
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-16 bg-gradient-to-r from-blue-900 to-purple-900">
-        <div className="container mx-auto px-6 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">Stay Updated</h2>
-          <p className="text-xl mb-8 max-w-2xl mx-auto">
-            Subscribe to get notifications about upcoming events
-          </p>
-          <div className="max-w-md mx-auto flex gap-2">
-            <input 
-              type="email" 
-              placeholder="Your email address" 
-              className="flex-1 px-4 py-3 rounded-lg bg-white/10 border border-white/20 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            />
-            <button className="px-6 py-3 bg-white text-gray-900 rounded-lg font-medium hover:bg-gray-100 transition-colors">
-              Subscribe
-            </button>
-          </div>
         </div>
       </section>
     </div>
