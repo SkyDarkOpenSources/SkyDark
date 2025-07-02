@@ -1,4 +1,3 @@
-// src/app/events/page.tsx
 "use client";
 
 import { Events } from "@/data/data";
@@ -7,14 +6,6 @@ import { Navbar } from "@/components/navbar";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 
-interface Events {
-  name: string;
-  date: string;
-  description: string;
-  link: string;
-  image?: string;
-  location?: string;
-}
 
 export default function EventsPage() {
   const { isSignedIn } = useUser();
@@ -33,7 +24,7 @@ export default function EventsPage() {
   };
 
   // Handle click event for Learn More button
-  const handleLearnMoreClick = (eventLink: string) => {
+  const handleLearnMoreClick = () => {
     if (isSignedIn) {
       router.push('/dashboard/events');
     } else {
@@ -71,8 +62,6 @@ export default function EventsPage() {
                   key={index} 
                   className="bg-gray-800 rounded-xl overflow-hidden hover:shadow-lg hover:shadow-blue-500/20 transition-all"
                 >
-                  {/* Event image with fallback */}
-                  
                   <div className="p-6">
                     <div className="flex items-center gap-2 text-blue-400 mb-2">
                       <Rocket size={16} />
@@ -96,7 +85,7 @@ export default function EventsPage() {
                     </div>
                     
                     <button
-                      onClick={() => handleLearnMoreClick(event.link)}
+                      onClick={handleLearnMoreClick}
                       className="mt-6 w-full py-2 bg-blue-600 hover:bg-blue-700 rounded-lg flex items-center justify-center gap-2 transition-colors"
                     >
                       Learn More <ArrowRight size={16} />
