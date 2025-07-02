@@ -8,13 +8,13 @@ export async function POST(req: Request) {
   const SIGNING_SECRET = process.env.SIGNING_SECRET
 
   if (!SIGNING_SECRET) {
-    throw new Error('Error: Please add SIGNING_SECRET from Clerk Dashboard to .env or .env.local')
+    throw new Error('Error: Please add SIGNING_SECRET from Clerk Dashboard to .env or .env')
   }
 
   // Create new Svix instance with secret
   const wh = new Webhook(SIGNING_SECRET)
 
-  // Get headers - NO AWAIT NEEDED
+  // Get headers
   const headerPayload = await headers()
   const svix_id = headerPayload.get('svix-id')
   const svix_timestamp = headerPayload.get('svix-timestamp')
@@ -22,10 +22,9 @@ export async function POST(req: Request) {
 
   // If there are no headers, error out
   if (!svix_id || !svix_timestamp || !svix_signature) {
-    return NextResponse.json(
-      { error: 'Error: Missing Svix headers' },
-      { status: 400 }
-    )
+    return new Response('Error: Missing Svix headers', {
+      status: 400,
+    })
   }
 
   // Get body
@@ -43,34 +42,30 @@ export async function POST(req: Request) {
     }) as WebhookEvent
   } catch (err) {
     console.error('Error: Could not verify webhook:', err)
-    return NextResponse.json(
-      { error: 'Error: Verification error' },
-      { status: 400 }
-    )
+    return new Response('Error: Verification error', {
+      status: 400,
+    })
   }
 
-  // Handle user.created event
-  if (evt.type === "user.created") {
+  // Do something with payload
+  // For this guide, log payload to console
+  
+  const eventType = evt.type
+
+  if (eventType === "user.created") {
     const { id, first_name, last_name, email_addresses } = evt.data
 
     const user = {
       clerkId: id,
-      firstName: first_name || '', // Fallback for optional fields
-      lastName: last_name || '',  // Fallback for optional fields
-      email: email_addresses[0]?.email_address || '',
+      firstName: first_name!,
+      lastName: last_name!,
+      email: email_addresses[0].email_address,
     }
-
-    try {
-      await createUser(user)
-      return NextResponse.json({ success: true })
-    } catch (error) {
-      console.error('Error creating user:', error)
-      return NextResponse.json(
-        { error: 'Error creating user in database' },
-        { status: 500 }
-      )
-    }
+    // call a server action
+    await createUser(user);
+    return NextResponse.json({ success: true });
   }
 
-  return NextResponse.json({ message: 'Webhook received' }, { status: 200 })
+
+  return new Response('Webhook received', { status: 200 })
 }
