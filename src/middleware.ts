@@ -6,11 +6,11 @@ const isPublicRoute = createRouteMatcher([
   '/api/webhooks/(.*)',
 ]);
 
-export default clerkMiddleware(async (auth, req) => {
-  if (!isPublicRoute(req)) {
-    await auth.protect();
+export default clerkMiddleware(async (auth, request) => {
+  if (!isPublicRoute(request)) {
+    await auth.protect()
   }
-});
+})
 
 export const config = {
   matcher: [
@@ -19,4 +19,4 @@ export const config = {
     // Always run for API routes
     '/(api|trpc)(.*)',
   ],
-};
+}
