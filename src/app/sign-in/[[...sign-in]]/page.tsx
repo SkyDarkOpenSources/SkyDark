@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useSignIn } from '@clerk/nextjs'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -10,6 +11,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Separator } from '@/components/ui/separator'
 import { Eye, EyeOff, Mail, Lock } from 'lucide-react'
+
+interface ClerkError {
+  errors?: Array<{
+    message: string
+  }>
+}
 
 export default function SignInPage() {
   const { isLoaded, signIn, setActive } = useSignIn()
@@ -39,8 +46,9 @@ export default function SignInPage() {
       } else {
         setError('Sign in failed. Please check your credentials.')
       }
-    } catch (err: any) {
-      setError(err.errors?.[0]?.message || 'An error occurred during sign in.')
+    } catch (err: unknown) {
+      const clerkError = err as ClerkError
+      setError(clerkError.errors?.[0]?.message || 'An error occurred during sign in.')
     } finally {
       setIsLoading(false)
     }
@@ -58,8 +66,9 @@ export default function SignInPage() {
         redirectUrl: '/sso-callback',
         redirectUrlComplete: '/dashboard',
       })
-    } catch (err: any) {
-      setError(err.errors?.[0]?.message || 'An error occurred during sign in.')
+    } catch (err: unknown) {
+      const clerkError = err as ClerkError
+      setError(clerkError.errors?.[0]?.message || 'An error occurred during sign in.')
       setIsLoading(false)
     }
   }
@@ -206,12 +215,12 @@ export default function SignInPage() {
           </form>
 
           <div className="text-center text-sm">
-            <a
+            <Link
               href="/sign-up"
               className="text-blue-600 hover:text-blue-500 font-medium"
             >
-              Don't have an account? Sign up
-            </a>
+              Don&apos;t have an account? Sign up
+            </Link>
           </div>
         </CardContent>
       </Card>
