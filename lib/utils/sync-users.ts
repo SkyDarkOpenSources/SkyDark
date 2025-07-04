@@ -1,5 +1,5 @@
-import { clerkClient } from '@clerk/nextjs/server'; // Good
-import { syncAllClerkUsers } from '../actions/user.action';
+import { clerkClient } from '@clerk/clerk-sdk-node';
+import { syncAllClerkUsers } from '../actions/user.action'; // Adjust the path if needed
 
 interface ClerkUser {
   id: string;
@@ -11,11 +11,8 @@ interface ClerkUser {
 
 export async function syncExistingUsers() {
   try {
-    // 👇 Correctly get the actual Clerk client instance
-    const client = await clerkClient();
-
-    // 👇 Now access users from the actual client
-    const { data: clerkUsers } = await client.users.getUserList();
+    // ✅ Correct: No destructuring, it directly returns an array
+    const clerkUsers = await clerkClient.users.getUserList();
 
     const usersToSync = clerkUsers.map((user: ClerkUser) => ({
       clerkId: user.id,
