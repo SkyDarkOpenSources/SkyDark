@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Separator } from '@/components/ui/separator'
 import { Eye, EyeOff, Mail, Lock } from 'lucide-react'
 
 interface ClerkError {
@@ -95,7 +96,7 @@ export default function SignInPage() {
               <p className="text-white/80 mt-2">Sign in to access your personalized dashboard</p>
             </div>
             <div className="text-left mb-8">
-              <p className="text-white/90 text-lg mb-1">Don't have an account?</p>
+              <p className="text-white/90 text-lg mb-1">Don&apos;t have an account?</p>
               <Link href="/sign-up">
                 <span className="text-cyan-200 hover:text-cyan-100 font-semibold text-lg cursor-pointer transition-colors">
                   Sign Up
@@ -106,9 +107,9 @@ export default function SignInPage() {
         </div>
       </div>
 
-      {/* Right side with login form - full width on mobile */}
+      {/* Right side with login form - centered on mobile */}
       <div className="w-full lg:w-[45%] flex items-center justify-center p-4 sm:p-8">
-        <div className="w-full max-w-md space-y-6 p-6 sm:p-8 rounded-lg bg-card">
+        <div className="w-full max-w-md space-y-6 p-6 sm:p-8 rounded-lg bg-card mt-[20vh] lg:mt-0">
           <div className="text-center">
             <h1 className="text-3xl font-bold mb-2 text-card-foreground">Login to SkyDark</h1>
             <p className="text-muted-foreground">
@@ -236,7 +237,7 @@ export default function SignInPage() {
 
           {/* Mobile sign up link - always visible on mobile */}
           <div className="text-center text-sm lg:hidden">
-            <p className="text-muted-foreground mb-1">Don't have an account?</p>
+            <p className="text-muted-foreground mb-1">Don&apos;t have an account?</p>
             <Link
               href="/sign-up"
               className="text-primary hover:text-primary/80 font-medium"
