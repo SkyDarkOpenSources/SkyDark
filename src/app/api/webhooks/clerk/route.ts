@@ -59,7 +59,7 @@ export async function POST(req: Request) {
 
   // Handle user creation
   if (eventType === 'user.created') {
-    const { id, first_name, last_name, email_addresses, image_url, username } = evt.data;
+    const { id, first_name, last_name, email_addresses, image_url } = evt.data;
 
     // Validate required data
     if (!id || !email_addresses || email_addresses.length === 0) {
@@ -92,7 +92,7 @@ export async function POST(req: Request) {
 
   // Handle user updates
   if (eventType === 'user.updated') {
-    const { id, first_name, last_name, email_addresses, image_url, username } = evt.data;
+    const { id, first_name, last_name, email_addresses, image_url } = evt.data;
 
     if (!id) {
       return new NextResponse('Missing user ID', {
