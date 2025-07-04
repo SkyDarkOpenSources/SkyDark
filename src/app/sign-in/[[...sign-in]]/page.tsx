@@ -7,9 +7,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Separator } from '@/components/ui/separator'
 import { Eye, EyeOff, Mail, Lock } from 'lucide-react'
 
 interface ClerkError {
@@ -75,35 +73,60 @@ export default function SignInPage() {
 
   if (!isLoaded) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">
-            Sign in to your account
-          </CardTitle>
-          <CardDescription className="text-center">
-            Enter your credentials to access your account
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
+    <div className="min-h-screen flex flex-col lg:flex-row bg-background">
+      {/* Left side with gradient background and slant effect - hidden on mobile */}
+      <div className="hidden lg:block relative w-full lg:w-[55%] h-[30vh] lg:h-auto">
+        <div 
+          className="absolute inset-0 bg-gradient-to-br from-purple-600 via-cyan-500 to-blue-600"
+          style={{
+            clipPath: 'polygon(0 0, 100% 0, 85% 100%, 0% 100%)'
+          }}
+        >
+          <div className="p-8 h-full flex flex-col justify-between">
+            <div>
+              <h1 className="text-4xl font-bold text-white">Welcome Back</h1>
+              <p className="text-white/80 mt-2">Sign in to access your personalized dashboard</p>
+            </div>
+            <div className="text-left mb-8">
+              <p className="text-white/90 text-lg mb-1">Don't have an account?</p>
+              <Link href="/sign-up">
+                <span className="text-cyan-200 hover:text-cyan-100 font-semibold text-lg cursor-pointer transition-colors">
+                  Sign Up
+                </span>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Right side with login form - full width on mobile */}
+      <div className="w-full lg:w-[45%] flex items-center justify-center p-4 sm:p-8">
+        <div className="w-full max-w-md space-y-6 p-6 sm:p-8 rounded-lg bg-card">
+          <div className="text-center">
+            <h1 className="text-3xl font-bold mb-2 text-card-foreground">Login to SkyDark</h1>
+            <p className="text-muted-foreground">
+              Enter your credentials to access your account
+            </p>
+          </div>
+
           {error && (
             <Alert variant="destructive">
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
 
-          {/* OAuth Buttons */}
-          <div className="space-y-2">
+          {/* OAuth Buttons - now in one line */}
+          <div className="flex gap-2">
             <Button
               variant="outline"
-              className="w-full"
+              className="w-1/2 bg-background hover:bg-muted"
               onClick={() => handleOAuthSignIn('oauth_google')}
               disabled={isLoading}
             >
@@ -125,11 +148,11 @@ export default function SignInPage() {
                   d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                 />
               </svg>
-              Sign in with Google
+              Google
             </Button>
             <Button
               variant="outline"
-              className="w-full"
+              className="w-1/2 bg-background hover:bg-muted"
               onClick={() => handleOAuthSignIn('oauth_microsoft')}
               disabled={isLoading}
             >
@@ -139,28 +162,25 @@ export default function SignInPage() {
                 <path fill="#7FBA00" d="M1 13h10v10H1z" />
                 <path fill="#FFB900" d="M13 13h10v10H13z" />
               </svg>
-              Sign in with Microsoft
+              Microsoft
             </Button>
           </div>
 
+          {/* Separator */}
           <div className="relative">
-            <Separator />
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
-            </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">
+              <span className="px-2 text-muted-foreground">
                 Or continue with
               </span>
             </div>
           </div>
 
-          {/* Sign In Form */}
+          {/* Sign In Form - removed borders */}
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="emailOrUsername">Email or Username</Label>
+            <div className="space-y-3">
+              <Label htmlFor="emailOrUsername" className="text-card-foreground">Email or Username</Label>
               <div className="relative">
-                <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input
                   id="emailOrUsername"
                   placeholder="Enter your email or username"
@@ -168,16 +188,16 @@ export default function SignInPage() {
                   value={emailOrUsername}
                   onChange={(e) => setEmailOrUsername(e.target.value)}
                   required
-                  className="pl-10"
+                  className="pl-10 bg-muted/50 hover:bg-muted/70 focus:bg-muted/70 transition-colors border-0 shadow-none"
                   disabled={isLoading}
                 />
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+            <div className="space-y-3 mt-4">
+              <Label htmlFor="password" className="text-card-foreground">Password</Label>
               <div className="relative">
-                <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input
                   id="password"
                   placeholder="Enter your password"
@@ -185,12 +205,12 @@ export default function SignInPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="pl-10 pr-10"
+                  className="pl-10 pr-10 bg-muted/50 hover:bg-muted/70 focus:bg-muted/70 transition-colors border-0 shadow-none"
                   disabled={isLoading}
                 />
                 <button
                   type="button"
-                  className="absolute right-3 top-3 h-4 w-4 text-gray-400 hover:text-gray-600"
+                  className="absolute right-3 top-3 h-4 w-4 text-muted-foreground hover:text-card-foreground"
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -200,7 +220,7 @@ export default function SignInPage() {
 
             <Button
               type="submit"
-              className="w-full"
+              className="w-full mt-6"
               disabled={isLoading || !emailOrUsername || !password}
             >
               {isLoading ? (
@@ -214,16 +234,18 @@ export default function SignInPage() {
             </Button>
           </form>
 
-          <div className="text-center text-sm">
+          {/* Mobile sign up link - always visible on mobile */}
+          <div className="text-center text-sm lg:hidden">
+            <p className="text-muted-foreground mb-1">Don't have an account?</p>
             <Link
               href="/sign-up"
-              className="text-blue-600 hover:text-blue-500 font-medium"
+              className="text-primary hover:text-primary/80 font-medium"
             >
-              Don&apos;t have an account? Sign up
+              Sign Up
             </Link>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   )
 }
