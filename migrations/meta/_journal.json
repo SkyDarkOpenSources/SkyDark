@@ -8,6 +8,13 @@
       "when": 1751551032995,
       "tag": "0000_petite_pete_wisdom",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1751609723083,
+      "tag": "0001_open_boomerang",
+      "breakpoints": true
     }
   ]
 }
