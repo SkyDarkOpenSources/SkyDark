@@ -101,11 +101,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-
-      <SidebarFooter>
-        <div className="p-4 text-xs text-muted-foreground">© 2024 SkyDark</div>
-      </SidebarFooter>
-      <SidebarRail />
     </Sidebar>
   )
 }
