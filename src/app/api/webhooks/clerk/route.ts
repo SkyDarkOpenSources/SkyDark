@@ -1,8 +1,10 @@
+// app/api/webhooks/clerk/route.ts
 import { Webhook } from 'svix';
 import { headers } from 'next/headers';
 import { WebhookEvent } from '@clerk/nextjs/server';
 import { createUser, deleteUser, updateUser } from '../../../../../lib/actions/user.action';
 import { NextResponse } from 'next/server';
+import { clerkClient } from '@clerk/clerk-sdk-node';
 
 interface UserUpdateData {
   firstName?: string;
@@ -68,11 +70,15 @@ export async function POST(req: Request) {
       });
     }
 
-    // Create user in database
     try {
+      // Fetch complete user data from Clerk to get username
+      const clerkUser = await clerkClient.users.getUser(id);
+      const username = clerkUser.username;
+
+      // Create user in database
       const result = await createUser({
         clerkId: id,
-        firstName: first_name || '',
+        firstName: first_name || username || 'User', // Fallback to username, then 'User'
         lastName: last_name || '',
         email: email_addresses[0].email_address,
         profileImageUrl: image_url,

@@ -9,21 +9,24 @@ interface ClerkUser {
   imageUrl: string;
 }
 
+// lib/utils/sync-users.ts
 export async function syncExistingUsers() {
   try {
-    // ✅ Correct: No destructuring, it directly returns an array
-    const clerkUsers = await clerkClient.users.getUserList();
+    const clerkUsers = await clerkClient.users.getUserList({
+      limit: 100, // Add pagination if you have many users
+    });
 
-    const usersToSync = clerkUsers.map((user: ClerkUser) => ({
+    const usersToSync = clerkUsers.map((user) => ({
       clerkId: user.id,
       email: user.emailAddresses[0]?.emailAddress || '',
-      firstName: user.firstName || '',
+      firstName: user.firstName || user.username || '', // Fallback to username
       lastName: user.lastName || '',
       profileImageUrl: user.imageUrl,
     }));
 
+    console.log('Syncing users:', usersToSync);
     const result = await syncAllClerkUsers(usersToSync);
-
+    
     return {
       success: result.success,
       message: `Synced ${result.syncedCount} users`,
