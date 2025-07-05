@@ -267,7 +267,7 @@ export default function SignUpPage() {
                 Verify your email
               </h2>
               <p className="text-muted-foreground text-center">
-                We've sent a verification code to <span className="font-medium">{email}</span>
+                We&apos;ve sent a verification code to <span className="font-medium">{email}</span>
               </p>
               
               <form onSubmit={handleVerify} className="space-y-4">
@@ -302,7 +302,7 @@ export default function SignUpPage() {
               </form>
 
               <p className="text-sm text-muted-foreground text-center">
-                Didn't receive a code?{' '}
+                Didn&apos;t receive a code?{' '}
                 <button
                   type="button"
                   className="text-primary hover:text-primary/80 font-medium"
