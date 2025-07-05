@@ -10,12 +10,6 @@ import { Label } from '@/components/ui/label'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Eye, EyeOff, User, Mail, Lock } from 'lucide-react'
 
-interface ClerkError {
-  errors?: Array<{
-    message: string
-  }>
-}
-
 export default function SignUpPage() {
   const { isLoaded, signUp, setActive } = useSignUp()
   const [username, setUsername] = useState('')
@@ -46,9 +40,16 @@ export default function SignUpPage() {
       // Prepare email verification
       await signUp.prepareEmailAddressVerification({ strategy: 'email_code' })
       setPendingVerification(true)
-    } catch (err: any) {
-      setError(err.errors?.[0]?.message || 'An error occurred during sign up.')
-      console.error('Sign up error:', JSON.stringify(err, null, 2))
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message)
+      } else if (typeof err === 'object' && err !== null && 'errors' in err) {
+        const clerkError = err as { errors: { message: string }[] }
+        setError(clerkError.errors[0]?.message || 'An error occurred during sign up.')
+      } else {
+        setError('An unexpected error occurred')
+      }
+      console.error('Sign up error:', err)
     } finally {
       setIsLoading(false)
     }
@@ -72,9 +73,16 @@ export default function SignUpPage() {
         await setActive({ session: completeSignUp.createdSessionId })
         router.push('/')
       }
-    } catch (err: any) {
-      setError(err.errors?.[0]?.message || 'An error occurred during verification.')
-      console.error('Verification error:', JSON.stringify(err, null, 2))
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message)
+      } else if (typeof err === 'object' && err !== null && 'errors' in err) {
+        const clerkError = err as { errors: { message: string }[] }
+        setError(clerkError.errors[0]?.message || 'An error occurred during verification.')
+      } else {
+        setError('An unexpected error occurred')
+      }
+      console.error('Verification error:', err)
     } finally {
       setIsLoading(false)
     }
@@ -92,8 +100,15 @@ export default function SignUpPage() {
         redirectUrl: '/sso-callback',
         redirectUrlComplete: '/',
       })
-    } catch (err: any) {
-      setError(err.errors?.[0]?.message || 'An error occurred during sign up.')
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message)
+      } else if (typeof err === 'object' && err !== null && 'errors' in err) {
+        const clerkError = err as { errors: { message: string }[] }
+        setError(clerkError.errors[0]?.message || 'An error occurred during sign up.')
+      } else {
+        setError('An unexpected error occurred')
+      }
       setIsLoading(false)
     }
   }
