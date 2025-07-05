@@ -46,9 +46,9 @@ export default function SignUpPage() {
       // Prepare email verification
       await signUp.prepareEmailAddressVerification({ strategy: 'email_code' })
       setPendingVerification(true)
-    } catch (err: unknown) {
-      const clerkError = err as ClerkError
-      setError(clerkError.errors?.[0]?.message || 'An error occurred during sign up.')
+    } catch (err: any) {
+      setError(err.errors?.[0]?.message || 'An error occurred during sign up.')
+      console.error('Sign up error:', JSON.stringify(err, null, 2))
     } finally {
       setIsLoading(false)
     }
@@ -70,11 +70,11 @@ export default function SignUpPage() {
       if (completeSignUp.status === 'complete') {
         // Set active session and redirect
         await setActive({ session: completeSignUp.createdSessionId })
-        router.push('/dashboard')
+        router.push('/')
       }
-    } catch (err: unknown) {
-      const clerkError = err as ClerkError
-      setError(clerkError.errors?.[0]?.message || 'An error occurred during verification.')
+    } catch (err: any) {
+      setError(err.errors?.[0]?.message || 'An error occurred during verification.')
+      console.error('Verification error:', JSON.stringify(err, null, 2))
     } finally {
       setIsLoading(false)
     }
@@ -87,15 +87,13 @@ export default function SignUpPage() {
     setError('')
 
     try {
-      // OAuth authentication will trigger the Clerk webhook
       await signUp.authenticateWithRedirect({
         strategy,
         redirectUrl: '/sso-callback',
-        redirectUrlComplete: '/dashboard',
+        redirectUrlComplete: '/',
       })
-    } catch (err: unknown) {
-      const clerkError = err as ClerkError
-      setError(clerkError.errors?.[0]?.message || 'An error occurred during sign up.')
+    } catch (err: any) {
+      setError(err.errors?.[0]?.message || 'An error occurred during sign up.')
       setIsLoading(false)
     }
   }
@@ -114,14 +112,18 @@ export default function SignUpPage() {
       <div className="w-full lg:w-[45%] flex items-center justify-center p-4 sm:p-8">
         <div className="w-full max-w-md space-y-6 p-6 sm:p-8 rounded-lg bg-card mt-[20vh] lg:mt-0">
           <div className="text-center">
-            <h1 className="text-3xl font-bold mb-2 text-card-foreground">Create Account</h1>
+            <h1 className="text-3xl font-bold mb-2 text-card-foreground">
+              {pendingVerification ? 'Verify Your Email' : 'Create Account'}
+            </h1>
             <p className="text-muted-foreground">
-              Get started with your free account today
+              {pendingVerification 
+                ? `We've sent a verification code to ${email}`
+                : 'Get started with your free account today'}
             </p>
           </div>
 
           {/* Clerk CAPTCHA element - required for bot protection */}
-          <div id="clerk-captcha"></div>
+          <div id="clerk-captcha" data-action="sign_up"></div>
 
           {error && (
             <Alert variant="destructive">
