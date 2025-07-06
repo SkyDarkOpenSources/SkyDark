@@ -8,12 +8,11 @@ import { eq } from "drizzle-orm";
 interface CreateUserParams {
   clerkId: string;
   email: string;
-  firstName: string;
-  lastName: string;
+  username: string;
 }
 
 export async function createUser(params: CreateUserParams) {
-  const { clerkId, email, firstName, lastName } = params;
+  const { clerkId, email, username } = params;
 
   try {
     // Check if user already exists
@@ -23,8 +22,7 @@ export async function createUser(params: CreateUserParams) {
       await db.insert(users).values({
         clerkId,
         email,
-        firstName,
-        lastName,
+        username,
       });
     }
     return { success: true };

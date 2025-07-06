@@ -54,7 +54,7 @@ export async function POST(req: Request) {
 
     try {
     if (eventType === "user.created") {
-      const { id, first_name, last_name, email_addresses } = evt.data
+      const { id, username, email_addresses } = evt.data
 
       // Ensure we have required data
       if (!id || !email_addresses?.[0]?.email_address) {
@@ -79,8 +79,7 @@ export async function POST(req: Request) {
       if (!existingUser) {
         await db.insert(users).values({
           clerkId: id,
-          firstName: first_name || '',
-          lastName: last_name || '',
+          username: username || '',
           email: email_addresses[0].email_address,
         })
       }
