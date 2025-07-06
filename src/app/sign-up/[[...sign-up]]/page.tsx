@@ -1,14 +1,15 @@
-import { ClerkProvider, SignUp } from '@clerk/nextjs';
+// app/sign-up/[[...sign-up]]/page.tsx
+import { SignUp } from '@clerk/nextjs';
 
-export default async function SignUpPage() {
+export default function Page() {
   return (
-    <ClerkProvider>
-      <SignUp
+    <div className="flex justify-center items-center min-h-screen">
+      <SignUp 
         path="/sign-up"
         routing="path"
         signInUrl="/sign-in"
         afterSignUpUrl="/"
       />
-    </ClerkProvider>
+    </div>
   );
 }

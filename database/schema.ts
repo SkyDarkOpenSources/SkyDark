@@ -1,3 +1,4 @@
+// database/schema.ts
 import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 export const users = pgTable('users', {
@@ -9,3 +10,6 @@ export const users = pgTable('users', {
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow().$onUpdate(() => new Date()),
 });
+
+// Export the schema type
+export type User = typeof users.$inferSelect;

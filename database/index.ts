@@ -1,8 +1,10 @@
-import { drizzle } from "drizzle-orm/neon-http";
-import { neon } from "@neondatabase/serverless";
-import { config } from "dotenv";
+// database/index.ts
+import { drizzle } from 'drizzle-orm/postgres-js';
+import postgres from 'postgres';
+import * as schema from './schema';
 
-config({ path: ".env.local" }); // or .env.local
+const connectionString = process.env.DATABASE_URL!;
 
-const sql = neon(process.env.DATABASE_URL!);
-export const db = drizzle({ client: sql });
+// Disable prefetch as it's not supported for "Transaction" pool mode 
+const client = postgres(connectionString, { prepare: false });
+export const db = drizzle(client, { schema });
