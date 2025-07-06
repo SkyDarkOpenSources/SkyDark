@@ -15,6 +15,20 @@
       "when": 1751609723083,
       "tag": "0001_open_boomerang",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1751751474147,
+      "tag": "0002_melted_exiles",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1751842614524,
+      "tag": "0003_free_rocket_racer",
+      "breakpoints": true
     }
   ]
 }
