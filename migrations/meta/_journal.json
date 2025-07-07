@@ -29,6 +29,34 @@
       "when": 1751842614524,
       "tag": "0003_free_rocket_racer",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1751846318751,
+      "tag": "0004_spicy_banshee",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1751858655261,
+      "tag": "0005_even_roulette",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1751860397531,
+      "tag": "0006_left_veda",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1751863379795,
+      "tag": "0007_uneven_nebula",
+      "breakpoints": true
     }
   ]
 }
