@@ -2,7 +2,7 @@
 
 import { Events } from "@/data/data";
 import { Calendar, MapPin, ArrowRight, Rocket } from "lucide-react";
-import { Navbar } from "@/components/navbar";
+import Navbar from "@/components/navbar";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 

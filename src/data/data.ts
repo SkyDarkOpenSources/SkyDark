@@ -1,4 +1,4 @@
-// src/lib/data.ts
+// data/data.ts
 export const founders = [
     {
         name: "Achyut Paliwal",
@@ -7,7 +7,7 @@ export const founders = [
         bio: "SkyDark's visionary leader, Achyut is passionate about space technology and innovation.",
     },
     {
-        name: "Izaan Ra ID",
+        name: "Akhilesh Samantaray",
         role: "Co-Founder & CTO",
         image: "/images/founders/jane.jpg",
         bio: "Jane is a tech enthusiast and expert in software development and architecture.",
