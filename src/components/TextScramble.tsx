@@ -14,7 +14,7 @@ export default function TextScramble({ text, className }: TextScrambleProps) {
 
   useEffect(() => {
     let resolvedIndex = -1;
-    let interval: NodeJS.Timeout;
+    const interval: NodeJS.Timeout;
 
     const scramble = () => {
       let newText = '';

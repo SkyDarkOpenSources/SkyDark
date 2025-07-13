@@ -26,7 +26,7 @@ export default function Footer() {
               </h3>
             </div>
             <p className="text-gray-300 text-sm leading-relaxed">
-              Innovating the future with cutting-edge technology solutions. Building tomorrow's digital experiences
+              Innovating the future with cutting-edge technology solutions. Building tomorrow&apos;s digital experiences
               today.
             </p>
             <div className="flex space-x-3">

@@ -40,7 +40,7 @@ export default function About() {
             <div className="bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm rounded-lg p-8">
               <h2 className="text-3xl font-bold mb-4">Our Mission</h2>
               <p className="text-muted-foreground leading-relaxed">
-                At SkyDark, we're dedicated to democratizing aerospace technology by building cutting-edge model rockets, drones, UAVs, and spacecraft while making all our projects open-source. We believe in fostering a community where knowledge is shared freely to accelerate innovation in the aerospace sector.
+                At SkyDark, we&apos;re dedicated to democratizing aerospace technology by building cutting-edge model rockets, drones, UAVs, and spacecraft while making all our projects open-source. We believe in fostering a community where knowledge is shared freely to accelerate innovation in the aerospace sector.
               </p>
             </div>
 
@@ -113,7 +113,7 @@ export default function About() {
             <div className="bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm rounded-lg p-8 text-center">
               <h2 className="text-3xl font-bold mb-4">Join Our Mission</h2>
               <p className="text-muted-foreground leading-relaxed max-w-2xl mx-auto">
-                Whether you're an engineer, student, or aerospace enthusiast, there's a place for you at SkyDark. Contribute to our open-source projects, enroll in our courses, or collaborate with us on the next frontier of aerospace technology.
+                Whether you&apos;re an engineer, student, or aerospace enthusiast, there&apos;s a place for you at SkyDark. Contribute to our open-source projects, enroll in our courses, or collaborate with us on the next frontier of aerospace technology.
               </p>
             </div>
           </div>
