@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 interface TextScrambleProps {
   text: string;
   className?: string;
+  interval?: number; // Optional interval for scrambling speed
 }
 
 export default function TextScramble({ text, className }: TextScrambleProps) {
@@ -14,7 +15,7 @@ export default function TextScramble({ text, className }: TextScrambleProps) {
 
   useEffect(() => {
     let resolvedIndex = -1;
-    const interval: NodeJS.Timeout;
+    let interval: NodeJS.Timeout;
 
     const scramble = () => {
       let newText = '';
