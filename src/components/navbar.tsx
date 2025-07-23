@@ -12,7 +12,6 @@ import { ToggleTheme } from "@/components/ui/ToggleTheme"
 import { LogOut, ImageIcon, LayoutDashboardIcon } from "lucide-react"
 import { Mountain } from "lucide-react"
 import { UserButton, SignInButton, SignUpButton, useUser, useClerk } from "@clerk/nextjs"
-import { SidebarTrigger } from "@/components/ui/sidebar"
 
 export default function Navbar() {
   return (
@@ -53,7 +52,6 @@ export default function Navbar() {
           >
             Give/Donate
           </Link>
-          <SidebarTrigger />
         </nav>
 
         <div className="flex items-center gap-2">
