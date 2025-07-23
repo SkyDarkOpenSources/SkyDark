@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ClerkProvider } from '@clerk/nextjs';
-import { SidebarProvider } from "@/components/ui/sidebar";
 
 export const metadata: Metadata = {
   title: "SkyDark | Home",
@@ -46,7 +45,6 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}>
-      <SidebarProvider>
         <html lang="en" suppressHydrationWarning>
           <head />
           <body>
@@ -60,7 +58,6 @@ export default function RootLayout({
             </ThemeProvider>
           </body>
         </html>
-      </SidebarProvider>
     </ClerkProvider>
   );
 }
