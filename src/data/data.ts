@@ -32,6 +32,19 @@ export const Events = [
     },
 ];
 
+export const Courses = [
+    {
+        name: "Introduction to Aerospace Engineering",
+        description: "Learn the fundamentals of aerospace engineering, including aerodynamics, propulsion, and materials.",
+        payment_link: "https://buy.stripe.com/test_8x28wO1Kp2CI4sP48j0Ba00" // Add payment link
+    },
+    {
+        name: "Rocket Propulsion Basics",
+        description: "An introductory course on rocket propulsion systems and their applications in space exploration.",
+        payment_link: "https://buy.stripe.com/test_8x28wO1Kp2CI4sP48j0Ba00" // Add payment link
+    }
+];
+
 export const FooterAbout = [
     {
         name: "Home",

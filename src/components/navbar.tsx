@@ -9,9 +9,10 @@ import { useState, useRef } from "react"
 import { toast } from "sonner"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { ToggleTheme } from "@/components/ui/ToggleTheme"
-import { LogOut, ImageIcon } from "lucide-react"
+import { LogOut, ImageIcon, LayoutDashboardIcon } from "lucide-react"
 import { Mountain } from "lucide-react"
 import { UserButton, SignInButton, SignUpButton, useUser, useClerk } from "@clerk/nextjs"
+import { SidebarTrigger } from "@/components/ui/sidebar"
 
 export default function Navbar() {
   return (
@@ -52,6 +53,7 @@ export default function Navbar() {
           >
             Give/Donate
           </Link>
+          <SidebarTrigger />
         </nav>
 
         <div className="flex items-center gap-2">
@@ -165,6 +167,12 @@ function UserProfileDropdown() {
           >
             <ImageIcon className="mr-2 h-4 w-4" />
             <span>{isUploading ? "Uploading..." : "Upload Picture"}</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <LayoutDashboardIcon className="mr-2 h-4 w-4" />
+            <Link href="/dashboard" target="_blank" className="flex items-center gap-2">
+              <span>Go to Dashboard</span>
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuItem
             className="hover:bg-gray-100/80 dark:hover:bg-gray-700/80 focus:bg-gray-100/80 dark:focus:bg-gray-700/80 cursor-pointer"

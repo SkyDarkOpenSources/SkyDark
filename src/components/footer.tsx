@@ -133,7 +133,7 @@ export default function Footer() {
             </div>
           </div>
 
-          <div className="text-sm text-gray-400">Made with ❤️ by the SkyDark Team</div>
+          <div className="text-sm text-gray-400">Made by Team SkyDark</div>
         </div>
       </div>
 
