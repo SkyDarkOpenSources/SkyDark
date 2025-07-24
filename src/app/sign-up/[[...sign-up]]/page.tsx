@@ -50,9 +50,9 @@ export default function SignUpPage() {
           if (missingFields.includes('username')) {
             // Try to get user information from the sign up object
             try {
-              const emailAddresses = (signUp as any).emailAddresses || []
-              const firstName = (signUp as any).firstName || ''
-              const lastName = (signUp as any).lastName || ''
+              const emailAddresses = (signUp as unknown as { emailAddresses?: Array<{ emailAddress: string }> }).emailAddresses || []
+              const firstName = (signUp as unknown as { firstName?: string }).firstName || ''
+              const lastName = (signUp as unknown as { lastName?: string }).lastName || ''
               
               setOauthUserInfo({
                 email: emailAddresses[0]?.emailAddress || '',
@@ -118,6 +118,7 @@ export default function SignUpPage() {
           })
           setStep('verification')
         } catch (verifyErr) {
+          console.error('Verification setup error:', verifyErr)
           setError('Account created but verification setup failed. Please try signing in.')
         }
       }
@@ -242,6 +243,7 @@ export default function SignUpPage() {
             setError('Failed to complete account setup. Please try refreshing the page.')
           }
         } catch (reloadErr) {
+          console.error('Account setup reload error:', reloadErr)
           setError('Account setup incomplete. Please try refreshing the page or contact support.')
         }
       }
