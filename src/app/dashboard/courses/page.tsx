@@ -21,7 +21,7 @@ export default function CoursesPage() {
               <CardFooter>
                 <CourseModal 
                   name={course.name}
-                  description={course.description} content={""}/>
+                  description={course.description}/>
               </CardFooter>
             </Card>
           ))}

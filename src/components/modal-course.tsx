@@ -11,7 +11,6 @@ import { Button } from "@/components/ui/button";
 interface CourseModalProps {
   name: string;
   description: string;
-  content: string;
 }
 
 export function CourseModal({ name, description }: CourseModalProps) {
