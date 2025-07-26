@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ClerkProvider } from '@clerk/nextjs';
+import { Inter } from "next/font/google";
 
 export const metadata: Metadata = {
   title: "SkyDark | Home",
@@ -37,6 +38,7 @@ export const metadata: Metadata = {
   },
 };
 
+const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({
   children,
@@ -45,7 +47,7 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}>
-        <html lang="en" suppressHydrationWarning>
+        <html lang="en" suppressHydrationWarning className={inter.className}>
           <head />
           <body>
             <ThemeProvider

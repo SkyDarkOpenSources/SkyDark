@@ -9,37 +9,37 @@ import { useState, useRef } from "react"
 import { toast } from "sonner"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { ToggleTheme } from "@/components/ui/ToggleTheme"
-import { LogOut, ImageIcon, LayoutDashboardIcon } from "lucide-react"
+import { LogOut, ImageIcon, LayoutDashboardIcon, Menu } from "lucide-react"
 import { Mountain } from "lucide-react"
 import { UserButton, SignInButton, SignUpButton, useUser, useClerk } from "@clerk/nextjs"
 
 export default function Navbar() {
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-white/20 dark:border-gray-800/20 bg-white/80 dark:bg-gray-950/80 backdrop-blur-md supports-[backdrop-filter]:bg-white/60 supports-[backdrop-filter]:dark:bg-gray-950/60">
+    <header className="sticky top-0 z-50 w-full bg-transparent backdrop:blur-lg">
       <div className="container mx-auto flex h-16 max-w-6xl items-center justify-between px-4 md:px-6">
         <Link href="#" className="flex items-center gap-2" prefetch={false}>
           <Mountain className="h-6 w-6" />
           <span className="sr-only">Acme Inc</span>
         </Link>
 
-        <nav className="hidden items-center gap-6 text-sm font-medium md:flex">
+        <nav className="hidden items-center gap-6 text-sm md:flex">
           <Link
             href="/"
-            className="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50 transition-colors"
+            className="text-nutral-800"
             prefetch={false}
           >
             Home
           </Link>
           <Link
             href="/about"
-            className="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50 transition-colors"
+            className="text-nutral-800"
             prefetch={false}
           >
             About
           </Link>
           <Link
             href="/events"
-            className="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50 transition-colors"
+            className="text-nural-800"
             prefetch={false}
           >
             Events
@@ -47,7 +47,7 @@ export default function Navbar() {
           <Link
             href="https://buy.stripe.com/test_8x28wO1Kp2CI4sP48j0Ba00"
             target="_blank"
-            className="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50 transition-colors"
+            className="text-nutral-800"
             prefetch={false}
           >
             Give/Donate
@@ -58,6 +58,29 @@ export default function Navbar() {
           <ToggleTheme />
           <div className="ml-2">
             <UserProfileDropdown />
+          </div>
+          <div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="md:hidden">
+                  <Menu className="h-5 w-5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-48">
+                <DropdownMenuItem>
+                  <Link href="/" className="w-full">Home</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link href="/about" className="w-full">About</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link href="/events" className="w-full">Events</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link href="https://buy.stripe.com/test_8x28wO1Kp2CI4sP48j0Ba00" target="_blank" className="w-full">Give/Donate</Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </div>
@@ -156,10 +179,9 @@ function UserProfileDropdown() {
         </DropdownMenuTrigger>
         <DropdownMenuContent
           align="end"
-          className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-md border-gray-200/50 dark:border-gray-700/50 text-gray-900 dark:text-white w-48"
+          className=" backdrop-blur-md w-48"
         >
           <DropdownMenuItem
-            className="hover:bg-gray-100/80 dark:hover:bg-gray-700/80 focus:bg-gray-100/80 dark:focus:bg-gray-700/80 cursor-pointer"
             onClick={handleProfilePictureChange}
             disabled={isUploading}
           >
@@ -173,7 +195,6 @@ function UserProfileDropdown() {
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem
-            className="hover:bg-gray-100/80 dark:hover:bg-gray-700/80 focus:bg-gray-100/80 dark:focus:bg-gray-700/80 cursor-pointer"
             onClick={handleSignOut}
           >
             <LogOut className="mr-2 h-4 w-4" />

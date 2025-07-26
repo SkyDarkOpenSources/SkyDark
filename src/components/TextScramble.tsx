@@ -46,7 +46,7 @@ export default function TextScramble({ text, className }: TextScrambleProps) {
       className={className} 
       style={{ 
         whiteSpace: 'pre',
-        fontFamily: 'monospace', // Using monospace font for stable width
+        fontFamily: 'inter',
         fontWeight: 'inherit',
         fontSize: 'inherit',
       }}
