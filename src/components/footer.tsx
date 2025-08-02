@@ -4,7 +4,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
-import { Github, Twitter, Linkedin, Mail, MapPin, Phone } from "lucide-react"
+import { Github, Twitter, Linkedin, Mail, MapPin, MailIcon } from "lucide-react"
 
 export default function Footer() {
   return (
@@ -104,11 +104,11 @@ export default function Footer() {
             <div className="space-y-2 pt-4">
               <div className="flex items-center space-x-2 text-sm text-gray-300">
                 <MapPin className="h-4 w-4 text-cyan-400" />
-                <span>San Francisco, CA</span>
+                <span>Doha, QA</span>
               </div>
               <div className="flex items-center space-x-2 text-sm text-gray-300">
-                <Phone className="h-4 w-4 text-cyan-400" />
-                <span>+1 (555) 123-4567</span>
+                <MailIcon className="h-4 w-4 text-cyan-400" />
+                <span>skydarkteams@gmail.com</span>
               </div>
             </div>
           </div>

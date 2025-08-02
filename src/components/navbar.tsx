@@ -15,31 +15,31 @@ import { UserButton, SignInButton, SignUpButton, useUser, useClerk } from "@cler
 
 export default function Navbar() {
   return (
-    <header className="sticky top-0 z-50 w-full bg-transparent backdrop:blur-lg">
+    <header className="sticky top-0 z-50 w-full bg-transparent backdrop-blur-md">
       <div className="container mx-auto flex h-16 max-w-6xl items-center justify-between px-4 md:px-6">
         <Link href="#" className="flex items-center gap-2" prefetch={false}>
           <Mountain className="h-6 w-6" />
           <span className="sr-only">Acme Inc</span>
         </Link>
 
-        <nav className="hidden items-center gap-6 text-sm md:flex">
+        <nav className="hidden items-center gap-6 text-sm md:flex px-4 py-2">
           <Link
             href="/"
-            className="text-nutral-800"
+            className="font-medium transition-colors"
             prefetch={false}
           >
             Home
           </Link>
           <Link
             href="/about"
-            className="text-nutral-800"
+            className="font-medium transition-colors"
             prefetch={false}
           >
             About
           </Link>
           <Link
             href="/events"
-            className="text-nural-800"
+            className="font-medium transition-colors"
             prefetch={false}
           >
             Events
@@ -47,7 +47,7 @@ export default function Navbar() {
           <Link
             href="https://buy.stripe.com/test_8x28wO1Kp2CI4sP48j0Ba00"
             target="_blank"
-            className="text-nutral-800"
+            className="font-medium transition-colors"
             prefetch={false}
           >
             Give/Donate
@@ -62,21 +62,24 @@ export default function Navbar() {
           <div>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="md:hidden">
+                <Button variant="ghost" size="icon" className="md:hidden text-gray-900 dark:text-white hover:bg-white/20 dark:hover:bg-gray-800/40">
                   <Menu className="h-5 w-5" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-48">
-                <DropdownMenuItem>
+              <DropdownMenuContent 
+                align="start" 
+                className="w-48 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md border border-gray-200/30 dark:border-gray-700/30"
+              >
+                <DropdownMenuItem className="text-gray-800 dark:text-gray-200 hover:bg-gray-100/60 dark:hover:bg-gray-800/60">
                   <Link href="/" className="w-full">Home</Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem className="text-gray-800 dark:text-gray-200 hover:bg-gray-100/60 dark:hover:bg-gray-800/60">
                   <Link href="/about" className="w-full">About</Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem className="text-gray-800 dark:text-gray-200 hover:bg-gray-100/60 dark:hover:bg-gray-800/60">
                   <Link href="/events" className="w-full">Events</Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem className="text-gray-800 dark:text-gray-200 hover:bg-gray-100/60 dark:hover:bg-gray-800/60">
                   <Link href="https://buy.stripe.com/test_8x28wO1Kp2CI4sP48j0Ba00" target="_blank" className="w-full">Give/Donate</Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -141,12 +144,14 @@ function UserProfileDropdown() {
     return (
       <div className="flex items-center gap-2">
         <SignInButton mode="modal">
-          <Button variant="ghost" size="sm">
+          <Button variant="ghost" size="sm" className="text-gray-800 dark:text-gray-200 hover:bg-white/20 dark:hover:bg-gray-800/40">
             Sign In
           </Button>
         </SignInButton>
         <SignUpButton mode="modal">
-          <Button size="sm">Sign Up</Button>
+          <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white">
+            Sign Up
+          </Button>
         </SignUpButton>
       </div>
     )
@@ -162,7 +167,7 @@ function UserProfileDropdown() {
           <Button
             variant="ghost"
             size="icon"
-            className="rounded-full hover:bg-gray-100/80 dark:hover:bg-gray-800/80 focus:ring-2 focus:ring-sky-500 backdrop-blur-sm"
+            className="rounded-full hover:bg-white/20 dark:hover:bg-gray-800/40 focus:ring-2 focus:ring-blue-500 backdrop-blur-sm"
           >
             <UserButton
               afterSignOutUrl="/"
@@ -179,16 +184,17 @@ function UserProfileDropdown() {
         </DropdownMenuTrigger>
         <DropdownMenuContent
           align="end"
-          className=" backdrop-blur-md w-48"
+          className="w-48 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md border border-gray-200/30 dark:border-gray-700/30"
         >
           <DropdownMenuItem
             onClick={handleProfilePictureChange}
             disabled={isUploading}
+            className="text-gray-800 dark:text-gray-200 hover:bg-gray-100/60 dark:hover:bg-gray-800/60"
           >
             <ImageIcon className="mr-2 h-4 w-4" />
             <span>{isUploading ? "Uploading..." : "Upload Picture"}</span>
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem className="text-gray-800 dark:text-gray-200 hover:bg-gray-100/60 dark:hover:bg-gray-800/60">
             <LayoutDashboardIcon className="mr-2 h-4 w-4" />
             <Link href="/dashboard" target="_blank" className="flex items-center gap-2">
               <span>Go to Dashboard</span>
@@ -196,6 +202,7 @@ function UserProfileDropdown() {
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={handleSignOut}
+            className="text-gray-800 dark:text-gray-200 hover:bg-gray-100/60 dark:hover:bg-gray-800/60"
           >
             <LogOut className="mr-2 h-4 w-4" />
             <span>Logout</span>
