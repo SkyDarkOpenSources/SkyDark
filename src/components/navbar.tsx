@@ -167,7 +167,7 @@ function UserProfileDropdown() {
           <Button
             variant="ghost"
             size="icon"
-            className="rounded-full hover:bg-white/20 dark:hover:bg-gray-800/40 focus:ring-2 focus:ring-blue-500 backdrop-blur-sm"
+            className="rounded-full hover:bg-gray-100/80 dark:hover:bg-gray-800/80 focus:ring-2 focus:ring-sky-500 backdrop-blur-sm"
           >
             <UserButton
               afterSignOutUrl="/"
@@ -184,17 +184,16 @@ function UserProfileDropdown() {
         </DropdownMenuTrigger>
         <DropdownMenuContent
           align="end"
-          className="w-48 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md border border-gray-200/30 dark:border-gray-700/30"
+          className=" backdrop-blur-md w-48"
         >
           <DropdownMenuItem
             onClick={handleProfilePictureChange}
             disabled={isUploading}
-            className="text-gray-800 dark:text-gray-200 hover:bg-gray-100/60 dark:hover:bg-gray-800/60"
           >
             <ImageIcon className="mr-2 h-4 w-4" />
             <span>{isUploading ? "Uploading..." : "Upload Picture"}</span>
           </DropdownMenuItem>
-          <DropdownMenuItem className="text-gray-800 dark:text-gray-200 hover:bg-gray-100/60 dark:hover:bg-gray-800/60">
+          <DropdownMenuItem>
             <LayoutDashboardIcon className="mr-2 h-4 w-4" />
             <Link href="/dashboard" target="_blank" className="flex items-center gap-2">
               <span>Go to Dashboard</span>
@@ -202,7 +201,6 @@ function UserProfileDropdown() {
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={handleSignOut}
-            className="text-gray-800 dark:text-gray-200 hover:bg-gray-100/60 dark:hover:bg-gray-800/60"
           >
             <LogOut className="mr-2 h-4 w-4" />
             <span>Logout</span>

@@ -7,8 +7,11 @@ import { DotPattern } from "@/components/ui/kibo-ui/dot-pattern"
 import { cn } from "../../lib/utils"
 import { Rocket, Shield, Globe, Star, ArrowRight, CheckCircle } from "lucide-react"
 import { GridPattern } from "@/components/ui/kibo-ui/grid-pattern"
+import { currentUser } from "@clerk/nextjs/server"
 
-export default function HomePage() {
+export default async function HomePage() {
+  const user = await currentUser()
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -47,8 +50,11 @@ export default function HomePage() {
                 variant="outline"
                 className="text-red-400 border-red-400 hover:bg-red-500 hover:text-white transition-all duration-300 px-8 py-3 text-lg bg-transparent"
               >
-                <Link href="/dashboard" className="flex items-center gap-2 hover:cursor-pointer">
-                  Get Started <ArrowRight className="w-4 h-4" />
+                <Link 
+                  href={user ? "/dashboard" : "/sign-up"} 
+                  className="flex items-center gap-2 hover:cursor-pointer"
+                >
+                  {user ? "Go to Dashboard" : "Get Started"} <ArrowRight className="w-4 h-4" />
                 </Link>
               </Button>
               <Button
@@ -181,8 +187,11 @@ export default function HomePage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button size="lg" className="bg-red-500 hover:bg-red-600 text-white px-8 py-4 text-lg">
-                  <Link href="/dashboard" className="flex items-center gap-2">
-                    Start Free Trial <ArrowRight className="w-5 h-5" />
+                  <Link 
+                    href={user ? "/dashboard" : "/sign-up"} 
+                    className="flex items-center gap-2"
+                  >
+                    {user ? "Go to Dashboard" : "Start Free Trial"} <ArrowRight className="w-5 h-5" />
                   </Link>
                 </Button>
                 <Button
