@@ -21,19 +21,19 @@ export default async function HomePage() {
           <DotPattern className={cn("[mask-image:radial-gradient(700px_circle_at_center,white,transparent)]")} />
           <div className="flex flex-col absolute inset-0 items-center justify-center gap-6 px-4">
             <div className="relative">
-              {/* Main text with proper CSS shadow effects */}
+              {/* Main text with purple-blue-cyan glow effects */}
               <h1 
-                className="text-7xl font-bold text-center text-red-500"
+                className="text-7xl font-bold text-center bg-gradient-to-r from-purple-400 via-blue-500 to-cyan-400 bg-clip-text text-transparent"
                 style={{
                   textShadow: `
-                    0 0 20px rgba(239, 68, 68, 0.8),
-                    0 0 40px rgba(239, 68, 68, 0.6),
-                    0 0 60px rgba(239, 68, 68, 0.4),
-                    0 0 80px rgba(239, 68, 68, 0.3),
-                    0 0 100px rgba(239, 68, 68, 0.2),
-                    0 0 120px rgba(239, 68, 68, 0.1)
+                    0 0 200px rgba(139, 92, 246, 0.8),
+                    0 0 400px rgba(59, 130, 246, 0.6),
+                    0 0 600px rgba(34, 211, 238, 0.4),
+                    0 0 800px rgba(139, 92, 246, 0.3),
+                    0 0 1000px rgba(59, 130, 246, 0.2),
+                    0 0 1200px rgba(34, 211, 238, 0.1)
                   `,
-                  filter: 'drop-shadow(0 0 30px rgba(239, 68, 68, 0.5))'
+                  filter: 'drop-shadow(0 0 30px rgba(139, 92, 246, 0.5))'
                 }}
               >
                 Welcome to SkyDark
@@ -42,13 +42,13 @@ export default async function HomePage() {
             <p className="text-gray-400 text-xl text-center max-w-3xl leading-relaxed">
               A place full of vision on a mission to explore the world and beyond.
               <br />
-              <span className="text-red-500 font-semibold">Pricing? Just Kidding!</span> We got you covered. You don&apos;t
+              <span className="text-cyan-400 font-semibold">Pricing? Just Kidding!</span> We got you covered. You don&apos;t
               need to worry about anything!
             </p>
             <div className="flex gap-4 mt-8">
               <Button
                 variant="outline"
-                className="text-red-400 border-red-400 hover:bg-red-500 hover:text-white transition-all duration-300 px-8 py-3 text-lg bg-transparent"
+                className="text-purple-400 border-purple-400 hover:bg-purple-500 hover:text-white transition-all duration-300 px-8 py-3 text-lg bg-transparent"
               >
                 <Link 
                   href={user ? "/dashboard" : "/sign-up"} 
@@ -59,7 +59,7 @@ export default async function HomePage() {
               </Button>
               <Button
                 variant="default"
-                className="bg-red-500 text-white hover:bg-red-600 transition-all duration-300 px-8 py-3 text-lg hover:cursor-pointer"
+                className="bg-gradient-to-r from-purple-500 to-blue-500 text-white hover:from-purple-600 hover:to-blue-600 transition-all duration-300 px-8 py-3 text-lg hover:cursor-pointer"
               >
                 <Link href="/about">Learn More</Link>
               </Button>
@@ -80,10 +80,10 @@ export default async function HomePage() {
             )}
           />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            <Card className="border-gray-200 dark:border-gray-700">
+            <Card className="border-gray-200 dark:border-gray-700 hover:border-purple-400 transition-colors duration-300">
               <CardHeader>
                 <CardTitle className="text-xl font-semibold flex items-center gap-2">
-                  <Rocket className="w-6 h-6 text-red-500" />
+                  <Rocket className="w-6 h-6 text-purple-500" />
                   Space-Tech Events
                 </CardTitle>
                 <CardDescription className="text-gray-600 dark:text-gray-300">
@@ -91,10 +91,10 @@ export default async function HomePage() {
                 </CardDescription>
               </CardHeader>
             </Card>
-            <Card className="border-gray-200 dark:border-gray-700">
+            <Card className="border-gray-200 dark:border-gray-700 hover:border-blue-400 transition-colors duration-300">
               <CardHeader>
                 <CardTitle className="text-xl font-semibold flex items-center gap-2">
-                  <Shield className="w-6 h-6 text-red-500" />
+                  <Shield className="w-6 h-6 text-blue-500" />
                   Free-Courses
                 </CardTitle>
                 <CardDescription className="text-gray-600 dark:text-gray-300">
@@ -102,10 +102,10 @@ export default async function HomePage() {
                 </CardDescription>
               </CardHeader>
             </Card>
-            <Card className="border-gray-200 dark:border-gray-700">
+            <Card className="border-gray-200 dark:border-gray-700 hover:border-cyan-400 transition-colors duration-300">
               <CardHeader>
                 <CardTitle className="text-xl font-semibold flex items-center gap-2">
-                  <Globe className="w-6 h-6 text-red-500" />
+                  <Globe className="w-6 h-6 text-cyan-500" />
                   Drone technology
                 </CardTitle>
                 <CardDescription className="text-gray-600 dark:text-gray-300">
@@ -117,11 +117,11 @@ export default async function HomePage() {
         </div>
       
         {/* Testimonials Section */}
-        <section className="py-20 px-4 bg-red-600 text-white">
+        <section className="py-20 px-4 bg-gradient-to-br from-purple-600 via-blue-600 to-cyan-600 text-white">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold text-white mb-4">What out team has to say!</h2>
-              <p className="text-xl text-gray-300">Don&apos;t just take our word for it</p>
+              <p className="text-xl text-blue-100">Don&apos;t just take our word for it</p>
             </div>
             <div className="grid md:grid-cols-3 gap-8">
               {[
@@ -147,17 +147,17 @@ export default async function HomePage() {
                   rating: 5,
                 },
               ].map((testimonial, index) => (
-                <Card key={index} className="border-gray-200 dark:border-gray-700">
+                <Card key={index} className="border-gray-200 dark:border-gray-700 bg-white/10 backdrop-blur-sm">
                   <CardContent className="pt-6">
                     <div className="flex mb-4">
                       {[...Array(testimonial.rating)].map((_, i) => (
                         <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
                       ))}
                     </div>
-                    <p className="text-gray-600 dark:text-gray-300 mb-4">&quot;{testimonial.content}&quot;</p>
+                    <p className="text-blue-100 mb-4">&quot;{testimonial.content}&quot;</p>
                     <div>
-                      <div className="font-semibold text-gray-900 dark:text-white">{testimonial.name}</div>
-                      <div className="text-sm text-gray-500 dark:text-gray-400">{testimonial.role}</div>
+                      <div className="font-semibold text-white">{testimonial.name}</div>
+                      <div className="text-sm text-blue-200">{testimonial.role}</div>
                     </div>
                   </CardContent>
                 </Card>
@@ -186,7 +186,7 @@ export default async function HomePage() {
                 completely free!
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" className="bg-red-500 hover:bg-red-600 text-white px-8 py-4 text-lg">
+                <Button size="lg" className="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white px-8 py-4 text-lg">
                   <Link 
                     href={user ? "/dashboard" : "/sign-up"} 
                     className="flex items-center gap-2"
@@ -197,7 +197,7 @@ export default async function HomePage() {
                 <Button
                   size="lg"
                   variant="outline"
-                  className="border-red-400 text-red-400 hover:bg-red-500 hover:text-white px-8 py-4 text-lg bg-transparent"
+                  className="border-cyan-400 text-cyan-400 hover:bg-cyan-500 hover:text-white px-8 py-4 text-lg bg-transparent"
                 >
                   <Link href="/contact">Contact Sales</Link>
                 </Button>
