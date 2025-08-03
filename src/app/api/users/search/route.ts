@@ -5,7 +5,7 @@ import type { User, EmailAddress } from "@clerk/nextjs/server";
 
 interface UserResult {
   id: string;
-  fullName: string;
+  username: string;
   emailAddress: string;
   imageUrl?: string;
   createdAt: number;
@@ -69,9 +69,7 @@ export async function GET(request: NextRequest) {
       .filter((clerkUser: ClerkUserWithEmail) => clerkUser.id !== user.id) // Exclude current user
       .filter((clerkUser: ClerkUserWithEmail) => {
         // Search in multiple fields
-        const fullName = (clerkUser.fullName || '').toLowerCase();
-        const firstName = (clerkUser.firstName || '').toLowerCase();
-        const lastName = (clerkUser.lastName || '').toLowerCase();
+        const username = (clerkUser.username || '').toLowerCase();
         
         // Get email address
         const primaryEmail = clerkUser.emailAddresses?.find(
@@ -81,9 +79,7 @@ export async function GET(request: NextRequest) {
         
         // Check if search term matches any field
         return (
-          fullName.includes(searchTerm) ||
-          firstName.includes(searchTerm) ||
-          lastName.includes(searchTerm) ||
+          username.includes(searchTerm) ||
           emailAddress.includes(searchTerm)
         );
       })
@@ -102,22 +98,22 @@ export async function GET(request: NextRequest) {
         'No email';
 
       // Construct full name with fallbacks
-      let fullName = clerkUser.fullName;
-      if (!fullName) {
+      let username = clerkUser.username;
+      if (!username) {
         const first = clerkUser.firstName || '';
         const last = clerkUser.lastName || '';
-        fullName = `${first} ${last}`.trim();
+        username = `${first} ${last}`.trim();
       }
-      if (!fullName) {
-        fullName = emailAddress.split('@')[0]; // Use email username as fallback
+      if (!username) {
+        username = emailAddress.split('@')[0]; // Use email username as fallback
       }
-      if (!fullName) {
-        fullName = 'Unknown User';
+      if (!username) {
+        username = 'Unknown User';
       }
 
       return {
         id: clerkUser.id,
-        fullName: fullName,
+        username: clerkUser.username || username,
         emailAddress: emailAddress,
         imageUrl: clerkUser.imageUrl || undefined,
         createdAt: clerkUser.createdAt,

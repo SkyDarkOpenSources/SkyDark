@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge";
 
 interface UserResult {
   id: string;
-  fullName: string;
+  username: string;
   emailAddress: string;
   imageUrl?: string;
   createdAt: number;
@@ -177,7 +177,7 @@ export default function SearchPage() {
                     <div className="flex-1 flex items-center justify-between">
                       <div className="flex-1">
                         <h3 className="font-medium text-base leading-none mb-1 group-hover:text-primary transition-colors">
-                          {user.fullName || "Unknown User"}
+                          {user.username || "Unknown User"}
                         </h3>
                         <p className="text-sm text-muted-foreground">
                           {user.emailAddress}
@@ -186,9 +186,9 @@ export default function SearchPage() {
                       
                       {/* Avatar positioned on the right */}
                       <Avatar className="h-12 w-12 ml-3">
-                        <AvatarImage src={user.imageUrl} alt={user.fullName} />
+                        <AvatarImage src={user.imageUrl} alt={user.username} />
                         <AvatarFallback className="bg-primary/10 text-primary font-medium">
-                          {getInitials(user.fullName || "U")}
+                          {getInitials(user.username || "U")}
                         </AvatarFallback>
                       </Avatar>
                     </div>
