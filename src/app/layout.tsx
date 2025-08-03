@@ -5,34 +5,26 @@ import { ClerkProvider } from '@clerk/nextjs';
 import { Inter } from "next/font/google";
 
 export const metadata: Metadata = {
-  title: "SkyDark | Home",
+  title: "SkyDark",
   description:
-    "Space-tech company, aiming to build drones, model rockets, robots, and more. From building basic robots to launching rockets, we do it all. Join us in our journey to explore the world of tech and beyond.",
+    "A space-tech company aiming to build drones, rockets and aircrafts for the future of humanity",
   openGraph: {
     title: "SkyDark",
     description:
-      "Space-tech company, aiming to build drones, model rockets, robots, and more. From building basic robots to launching rockets, we do it all. Join us in our journey to explore the world of tech and beyond.",
-    url: "https://www.skydark.net",
-    siteName: "SkyDark",
-    type: "website",
-    locale: "en_US",
+      "A space-tech company aiming to build drones, rockets and aircrafts for the future of humanity",
     images: [
       {
-        url: "/favicon.ico",
-        width: 1200,
-        height: 630,
+        url: "https://www.skydark.net/favicon.ico",
       },
     ],
   },
   twitter: {
     title: "SkyDark",
     description:
-      "Space-tech company, aiming to build drones, model rockets, robots, and more. From building basic robots to launching rockets, we do it all. Join us in our journey to explore the world of tech and beyond.",
+      "A space-tech company aiming to build drones, rockets and aircrafts for the future of humanity",
     images: [
       {
-        url: "/favicon.ico",
-        width: 1200,
-        height: 630,
+        url: "https://www.skydark.net/favicon.ico",
       },
     ],
   },
