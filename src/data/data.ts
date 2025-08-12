@@ -32,30 +32,10 @@ export const Events = [
     },
 ];
 
-export const Courses = [
+export const Clubs = [
     {
-        name: "Introduction to Aerospace Engineering",
-        description: "Learn the fundamentals of aerospace engineering, including aerodynamics, propulsion, and materials.",
-        payment_link: "https://buy.stripe.com/test_8x28wO1Kp2CI4sP48j0Ba00" // Add payment link
-    },
-    {
-        name: "Rocket Propulsion Basics",
-        description: "An introductory course on rocket propulsion systems and their applications in space exploration.",
-        payment_link: "https://buy.stripe.com/test_8x28wO1Kp2CI4sP48j0Ba00" // Add payment link
-    }
-];
-
-export const FooterAbout = [
-    {
-        name: "Home",
-        link: "",
-    },
-    {
-        name: "About",
-        link: "",
-    },
-    {
-        name: "Mission/aim",
-        link: "",
+        name: "Space Enthusiasts Club",
+        description: "A club for those passionate about space exploration and technology.",
+        image: "/images/clubs/space-enthusiasts.jpg",
     },
 ];

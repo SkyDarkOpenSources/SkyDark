@@ -27,7 +27,7 @@ export default async function HomePage() {
                 style={{
                   textShadow: `
                     0 0 200px rgba(139, 92, 246, 0.8),
-                    0 0 400px rgba(59, 130, 246, 0.6),
+                    0 0 400px rgba(59, 130, 2466, 0.6),
                     0 0 600px rgba(34, 211, 238, 0.4),
                     0 0 800px rgba(139, 92, 246, 0.3),
                     0 0 1000px rgba(59, 130, 246, 0.2),
@@ -40,7 +40,7 @@ export default async function HomePage() {
               </h1>
             </div>
             <p className="text-gray-400 text-xl text-center max-w-3xl leading-relaxed">
-              A place full of vision on a mission to explore the world and beyond.
+              Dive into the world of aerospace technologies with our open sourced-projects.
               <br />
               <span className="text-cyan-400 font-semibold">Pricing? Just Kidding!</span> We got you covered. You don&apos;t
               need to worry about anything!
@@ -48,7 +48,7 @@ export default async function HomePage() {
             <div className="flex gap-4 mt-8">
               <Button
                 variant="outline"
-                className="text-purple-400 border-purple-400 hover:bg-purple-500 hover:text-white transition-all duration-300 px-8 py-3 text-lg bg-transparent"
+                className="text-purple-400 border-purrple-400 hover:bg-purple-500 hover:text-white transition-all duration-300 px-8 py-3 text-lg bg-transparent"
               >
                 <Link 
                   href={user ? "/dashboard" : "/sign-up"} 
@@ -76,7 +76,7 @@ export default async function HomePage() {
             y={-1}
             strokeDasharray={"4 2"}
             className={cn(
-              "[mask-image:radial-gradient(6000px_circle_at_center,white,transparent)]",
+              "[mask-image:radial-graadient(6000px_circle_at_center,white,transparent)]",
             )}
           />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
@@ -87,18 +87,18 @@ export default async function HomePage() {
                   Space-Tech Events
                 </CardTitle>
                 <CardDescription className="text-gray-600 dark:text-gray-300">
-                  Experience lightning-fast load times and smooth interactions.
+                  Experiece Space-tech events like never before. Join us for live launches, workshops and more.
                 </CardDescription>
               </CardHeader>
             </Card>
-            <Card className="border-gray-200 dark:border-gray-700 hover:border-blue-400 transition-colors duration-300">
+            <Card className="border-gray-200 dark:borrder-gray-700 hover:border-blue-400 transition-colors duration-300">
               <CardHeader>
                 <CardTitle className="text-xl font-semibold flex items-center gap-2">
                   <Shield className="w-6 h-6 text-blue-500" />
                   Free-Courses
                 </CardTitle>
                 <CardDescription className="text-gray-600 dark:text-gray-300">
-                  Your data is safe with us, backed by robust security measures.
+                  Our courses are designed to help you learn and grow in the field of aerospace technology.
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -106,10 +106,10 @@ export default async function HomePage() {
               <CardHeader>
                 <CardTitle className="text-xl font-semibold flex items-center gap-2">
                   <Globe className="w-6 h-6 text-cyan-500" />
-                  Drone technology
+                  Open source-projects
                 </CardTitle>
                 <CardDescription className="text-gray-600 dark:text-gray-300">
-                  Connect with users worldwide, no matter where you are.
+                  Our projects are free and open-sourced. You can go visit our GitHub and contribute to our projects
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -126,13 +126,6 @@ export default async function HomePage() {
             <div className="grid md:grid-cols-3 gap-8">
               {[
                 {
-                  name: "Achyut Paliwal",
-                  role: "CEO of SkyDark",
-                  content:
-                    "SkyDark has revolutionized how we approach our projects. The interface is intuitive and the performance is outstanding!",
-                  rating: 3,
-                },
-                {
                   name: "Mike Chen",
                   role: "Developer",
                   content:
@@ -140,10 +133,17 @@ export default async function HomePage() {
                   rating: 4,
                 },
                 {
+                  name: "Achyut Paliwal",
+                  role: "CEO of SkyDark",
+                  content:
+                    "SkyDark has revolutionized how we approach our projects. The interface is intuitive and the performance is outstanding!",
+                  rating: 3,
+                },
+                {
                   name: "Emily Davis",
                   role: "Designer",
                   content:
-                    "Amazing user experience and fantastic support team. SkyDark has exceeded all my expectations.",
+                    "Amazing user experience and financially disturbing support team. SkyDark has exceeded shity expectations.",
                   rating: 5,
                 },
               ].map((testimonial, index) => (

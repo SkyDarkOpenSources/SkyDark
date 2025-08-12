@@ -1,10 +1,44 @@
 // database/index.ts
-import { drizzle } from 'drizzle-orm/postgres-js';
-import postgres from 'postgres';
-import * as schema from './schema';
+import { drizzle } from "drizzle-orm/node-postgres";
+import { Pool } from "pg";
 
-const connectionString = process.env.DATABASE_URL!;
+// Create connection pool
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false, // Required for most cloud PostgreSQL services (Neon, Supabase, etc.)
+  },
+  max: 20, // Maximum number of connections in the pool
+  idleTimeoutMillis: 30000, // Close idle connections after 30 seconds
+  connectionTimeoutMillis: 2000, // Return error after 2 seconds if connection could not be established
+});
 
-// Disable prefetch as it's not supported for "Transaction" pool mode 
-const client = postgres(connectionString, { prepare: false });
-export const db = drizzle(client, { schema });
+// Initialize Drizzle with the pool
+export const db = drizzle(pool);
+
+// Optional: Add connection test function
+export const testConnection = async () => {
+  try {
+    const client = await pool.connect();
+    const result = await client.query('SELECT NOW()');
+    client.release();
+    console.log('Database connected successfully:', result.rows[0]);
+    return true;
+  } catch (error) {
+    console.error('Database connection failed:', error);
+    return false;
+  }
+};
+
+// Graceful shutdown
+export const closePool = async () => {
+  try {
+    await pool.end();
+    console.log('Database pool closed');
+  } catch (error) {
+    console.error('Error closing database pool:', error);
+  }
+};
+
+// Export pool for advanced usage if needed
+export { pool };

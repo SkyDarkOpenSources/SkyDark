@@ -36,8 +36,8 @@ const items = [
     icon: NewspaperIcon,
   },
   {
-    title: "Courses",
-    url: "/dashboard/courses",
+    title: "Clubs",
+    url: "/dashboard/clubs",
     icon: Book,
   },
 ]
