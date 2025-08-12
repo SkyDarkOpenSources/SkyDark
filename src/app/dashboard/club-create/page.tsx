@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { createClub } from '../../../../lib/actions/club.action';
 import { Upload, X, AlertCircle, Maximize2, Minimize2 } from 'lucide-react';
 
@@ -61,7 +62,7 @@ export default function ClubCreatePage() {
   };
 
   // Handle file selection
-  const handleFileSelect = async (file: File) => {
+  const handleFileSelect = useCallback(async (file: File) => {
     const error = validateImage(file);
     if (error) {
       setErrors(prev => ({ ...prev, image: error }));
@@ -78,8 +79,9 @@ export default function ClubCreatePage() {
       setIsExpanded(false);
     } catch (error) {
       setErrors(prev => ({ ...prev, image: 'Failed to process image' }));
+      console.error('Image processing error:', error);
     }
-  };
+  }, []);
 
   // Handle drag and drop
   const handleDrop = useCallback((e: React.DragEvent<HTMLDivElement>) => {
@@ -90,7 +92,7 @@ export default function ClubCreatePage() {
     if (files.length > 0) {
       handleFileSelect(files[0]);
     }
-  }, []);
+  }, [handleFileSelect]);
 
   const handleDragOver = useCallback((e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -365,11 +367,13 @@ export default function ClubCreatePage() {
                 <div className="relative">
                   <div className={`relative ${isExpanded ? 'fixed inset-0 z-50 bg-black bg-opacity-90 flex items-center justify-center p-4' : 'w-full bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden'}`}
                     style={isExpanded ? {} : { height: '400px' }}>
-                    <img
+                    <Image
                       src={imagePreview}
                       alt="Club preview"
                       className={`${isExpanded ? 'max-w-full max-h-full' : 'w-full h-full object-contain'}`}
                       style={{ transform: `scale(${imageSize / 100})` }}
+                      fill={!isExpanded}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                     <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-20 transition-all duration-200 flex items-center justify-center">
                       <button
