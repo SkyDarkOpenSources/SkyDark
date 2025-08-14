@@ -4,7 +4,7 @@ import { useState, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { createClub } from '../../../../lib/actions/club.action';
-import { Upload, X, AlertCircle, Maximize2, Minimize2 } from 'lucide-react';
+import { Upload, X, AlertCircle, Maximize2, Minimize2, RotateCw, Crop, ZoomIn, ZoomOut, Move, Square } from 'lucide-react';
 
 interface FormData {
   name: string;
@@ -19,9 +19,21 @@ interface FormErrors {
   general?: string;
 }
 
+interface CropData {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  scale: number;
+  rotation: number;
+}
+
 export default function ClubCreatePage() {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const imageRef = useRef<HTMLImageElement>(null);
+  
   const [formData, setFormData] = useState<FormData>({
     name: '',
     description: '',
@@ -31,10 +43,21 @@ export default function ClubCreatePage() {
   const [isLoading, setIsLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [isDragOver, setIsDragOver] = useState(false);
+  const [originalImagePreview, setOriginalImagePreview] = useState<string | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [imageSize, setImageSize] = useState<number>(100); // Default size percentage
   const [isExpanded, setIsExpanded] = useState(false);
-
+  const [showImageEditor, setShowImageEditor] = useState(false);
+  
+  // Crop and transform states
+  const [cropData, setCropData] = useState<CropData>({
+    x: 50,
+    y: 50,
+    width: 300,
+    height: 300,
+    scale: 1,
+    rotation: 0
+  });
+  
   // Convert file to base64 for preview and storage
   const fileToBase64 = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
@@ -43,6 +66,11 @@ export default function ClubCreatePage() {
       reader.onload = () => resolve(reader.result as string);
       reader.onerror = error => reject(error);
     });
+  };
+
+  // Convert blob to file
+  const blobToFile = (blob: Blob, fileName: string): File => {
+    return new File([blob], fileName, { type: blob.type });
   };
 
   // Validate image file
@@ -72,16 +100,150 @@ export default function ClubCreatePage() {
     try {
       const base64 = await fileToBase64(file);
       setFormData(prev => ({ ...prev, image: file }));
+      setOriginalImagePreview(base64);
       setImagePreview(base64);
       setErrors(prev => ({ ...prev, image: undefined }));
-      // Reset size when new image is uploaded
-      setImageSize(100);
+      
+      // Reset crop data for new image
+      setCropData({
+        x: 50,
+        y: 50,
+        width: 300,
+        height: 300,
+        scale: 1,
+        rotation: 0
+      });
+      
+      setShowImageEditor(false);
       setIsExpanded(false);
     } catch (error) {
       setErrors(prev => ({ ...prev, image: 'Failed to process image' }));
       console.error('Image processing error:', error);
     }
   }, []);
+
+  // Create cropped canvas with proper scaling and rotation
+  const getCroppedCanvas = (): Promise<HTMLCanvasElement | null> => {
+    if (!originalImagePreview) return Promise.resolve(null);
+    
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    
+    if (!ctx) return Promise.resolve(null);
+
+    // Create image element
+    const img = new window.Image();
+    img.crossOrigin = 'anonymous';
+    
+    return new Promise<HTMLCanvasElement>((resolve, reject) => {
+      img.onload = () => {
+        // Set canvas size to crop dimensions
+        canvas.width = cropData.width;
+        canvas.height = cropData.height;
+        
+        // Clear canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Calculate image dimensions and positioning
+        const imgAspectRatio = img.width / img.height;
+        const containerWidth = 600; // Approximate container width
+        const containerHeight = 400; // Approximate container height
+        
+        let drawWidth, drawHeight, offsetX, offsetY;
+        
+        if (imgAspectRatio > containerWidth / containerHeight) {
+          // Image is wider - fit by height
+          drawHeight = containerHeight;
+          drawWidth = drawHeight * imgAspectRatio;
+          offsetX = (containerWidth - drawWidth) / 2;
+          offsetY = 0;
+        } else {
+          // Image is taller - fit by width
+          drawWidth = containerWidth;
+          drawHeight = drawWidth / imgAspectRatio;
+          offsetX = 0;
+          offsetY = (containerHeight - drawHeight) / 2;
+        }
+        
+        // Apply scale
+        drawWidth *= cropData.scale;
+        drawHeight *= cropData.scale;
+        
+        // Calculate source crop area relative to scaled image
+        const scaleFactorX = img.width / drawWidth;
+        const scaleFactorY = img.height / drawHeight;
+        
+        const sourceX = (cropData.x - offsetX) * scaleFactorX;
+        const sourceY = (cropData.y - offsetY) * scaleFactorY;
+        const sourceWidth = cropData.width * scaleFactorX;
+        const sourceHeight = cropData.height * scaleFactorY;
+        
+        // Save context for rotation
+        ctx.save();
+        
+        // Move to center of canvas for rotation
+        ctx.translate(canvas.width / 2, canvas.height / 2);
+        
+        // Apply rotation
+        ctx.rotate((cropData.rotation * Math.PI) / 180);
+        
+        // Draw the cropped portion
+        ctx.drawImage(
+          img,
+          Math.max(0, sourceX),
+          Math.max(0, sourceY),
+          Math.min(sourceWidth, img.width - sourceX),
+          Math.min(sourceHeight, img.height - sourceY),
+          -canvas.width / 2,
+          -canvas.height / 2,
+          canvas.width,
+          canvas.height
+        );
+        
+        ctx.restore();
+        resolve(canvas);
+      };
+      
+      img.onerror = () => reject(new Error('Failed to load image'));
+      img.src = originalImagePreview;
+    });
+  };
+
+  // Convert canvas to blob
+  const canvasToBlob = (canvas: HTMLCanvasElement): Promise<Blob> => {
+    return new Promise((resolve, reject) => {
+      canvas.toBlob((blob) => {
+        if (blob) {
+          resolve(blob);
+        } else {
+          reject(new Error('Failed to create blob from canvas'));
+        }
+      }, 'image/jpeg', 0.9);
+    });
+  };
+
+  // Apply crop and close editor
+  const applyCrop = async () => {
+    if (!originalImagePreview) return;
+    
+    try {
+      const canvas = await getCroppedCanvas();
+      if (!canvas) {
+        throw new Error('Failed to create canvas');
+      }
+      
+      const blob = await canvasToBlob(canvas);
+      const croppedFile = blobToFile(blob, 'cropped-image.jpg');
+      const croppedBase64 = await fileToBase64(croppedFile);
+      
+      setFormData(prev => ({ ...prev, image: croppedFile }));
+      setImagePreview(croppedBase64);
+      setShowImageEditor(false);
+    } catch (error) {
+      console.error('Error applying crop:', error);
+      setErrors(prev => ({ ...prev, image: 'Failed to process cropped image' }));
+    }
+  };
 
   // Handle drag and drop
   const handleDrop = useCallback((e: React.DragEvent<HTMLDivElement>) => {
@@ -116,22 +278,69 @@ export default function ClubCreatePage() {
   const removeImage = () => {
     setFormData(prev => ({ ...prev, image: null }));
     setImagePreview(null);
+    setOriginalImagePreview(null);
+    setShowImageEditor(false);
+    setIsExpanded(false);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
   };
 
-  // Handle image size change
-  const handleSizeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setImageSize(Number(e.target.value));
+  // Clear the entire form
+  const clearForm = () => {
+    setFormData({
+      name: '',
+      description: '',
+      image: null
+    });
+    setImagePreview(null);
+    setOriginalImagePreview(null);
+    setErrors({});
+    setSuccessMessage('');
+    setShowImageEditor(false);
+    setIsExpanded(false);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
   };
 
   // Toggle expanded view
   const toggleExpand = () => {
     setIsExpanded(!isExpanded);
-    if (!isExpanded) {
-      setImageSize(100); // Reset to full size when expanding
+  };
+
+  // Open image editor
+  const openImageEditor = () => {
+    if (originalImagePreview) {
+      setShowImageEditor(true);
     }
+  };
+
+  // Crop control handlers
+  const handleScaleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCropData(prev => ({ ...prev, scale: Number(e.target.value) }));
+  };
+
+  const handleRotationChange = (direction: 'left' | 'right') => {
+    setCropData(prev => ({
+      ...prev,
+      rotation: prev.rotation + (direction === 'right' ? 90 : -90)
+    }));
+  };
+
+  const handleCropSizeChange = (dimension: 'width' | 'height', value: number) => {
+    setCropData(prev => ({ ...prev, [dimension]: Math.max(100, Math.min(800, value)) }));
+  };
+
+  const resetCrop = () => {
+    setCropData({
+      x: 50,
+      y: 50,
+      width: 300,
+      height: 300,
+      scale: 1,
+      rotation: 0
+    });
   };
 
   // Validation function
@@ -202,14 +411,7 @@ export default function ClubCreatePage() {
       if (result.success) {
         setSuccessMessage('Club created successfully!');
         // Reset form
-        setFormData({ name: '', description: '', image: null });
-        setImagePreview(null);
-        if (fileInputRef.current) {
-          fileInputRef.current.value = '';
-        }
-        // Reset image controls
-        setImageSize(100);
-        setIsExpanded(false);
+        clearForm();
         // Redirect after a short delay
         setTimeout(() => {
           router.push('/dashboard/clubs');
@@ -223,12 +425,6 @@ export default function ClubCreatePage() {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  // Clear all messages
-  const clearMessages = () => {
-    setSuccessMessage('');
-    setErrors({});
   };
 
   return (
@@ -365,76 +561,70 @@ export default function ClubCreatePage() {
                 </div>
               ) : (
                 <div className="relative">
-                  <div className={`relative ${isExpanded ? 'fixed inset-0 z-50 bg-black bg-opacity-90 flex items-center justify-center p-4' : 'w-full bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden'}`}
-                    style={isExpanded ? {} : { height: '400px' }}>
-                    <Image
-                      src={imagePreview}
-                      alt="Club preview"
-                      className={`${isExpanded ? 'max-w-full max-h-full' : 'w-full h-full object-contain'}`}
-                      style={{ transform: `scale(${imageSize / 100})` }}
-                      fill={!isExpanded}
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    />
-                    <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-20 transition-all duration-200 flex items-center justify-center">
+                  {/* Image Preview Container */}
+                  {isExpanded ? (
+                    <div className="fixed inset-0 z-50 bg-black bg-opacity-90 flex items-center justify-center p-4">
+                      <div className="relative max-w-full max-h-full">
+                        <img
+                          src={imagePreview}
+                          alt="Club preview"
+                          className="max-w-full max-h-full object-contain"
+                        />
+                        <button
+                          onClick={toggleExpand}
+                          className="absolute top-4 right-4 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 transition-all"
+                        >
+                          <X className="w-6 h-6" />
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="relative w-full bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden" style={{ height: '300px' }}>
+                      <img
+                        src={imagePreview}
+                        alt="Club preview"
+                        className="w-full h-full object-cover"
+                      />
                       <button
                         type="button"
                         onClick={removeImage}
-                        className="absolute top-2 right-2 opacity-0 hover:opacity-100 transition-opacity duration-200 bg-red-500 text-white p-2 rounded-full hover:bg-red-600"
+                        className="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors"
                       >
-                        <X className="w-5 h-5" />
+                        <X className="w-4 h-4" />
                       </button>
                     </div>
-                  </div>
+                  )}
 
                   {/* Image Controls */}
-                  <div className="mt-4 flex flex-col space-y-3">
-                    <div className="flex items-center justify-between">
+                  <div className="mt-4 flex flex-wrap gap-2 justify-between items-center">
+                    <div className="flex gap-2">
+                      <button
+                        type="button"
+                        onClick={openImageEditor}
+                        className="flex items-center px-3 py-1 text-sm bg-teal-500 text-white rounded-md hover:bg-teal-600 transition-colors"
+                        disabled={isLoading}
+                      >
+                        <Crop className="w-4 h-4 mr-1" />
+                        Edit & Crop
+                      </button>
                       <button
                         type="button"
                         onClick={toggleExpand}
-                        className="flex items-center text-sm text-teal-600 dark:text-teal-400 hover:text-teal-500 dark:hover:text-teal-300 font-medium"
+                        className="flex items-center px-3 py-1 text-sm bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors"
                         disabled={isLoading}
                       >
-                        {isExpanded ? (
-                          <>
-                            <Minimize2 className="w-4 h-4 mr-1" />
-                            Minimize
-                          </>
-                        ) : (
-                          <>
-                            <Maximize2 className="w-4 h-4 mr-1" />
-                            Expand
-                          </>
-                        )}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => fileInputRef.current?.click()}
-                        className="text-sm text-teal-600 dark:text-teal-400 hover:text-teal-500 dark:hover:text-teal-300 font-medium"
-                        disabled={isLoading}
-                      >
-                        Change Image
+                        {isExpanded ? <Minimize2 className="w-4 h-4 mr-1" /> : <Maximize2 className="w-4 h-4 mr-1" />}
+                        {isExpanded ? 'Minimize' : 'Expand'}
                       </button>
                     </div>
-
-                    {!isExpanded && (
-                      <div className="space-y-2">
-                        <label htmlFor="imageSize" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                          Image Size: {imageSize}%
-                        </label>
-                        <input
-                          type="range"
-                          id="imageSize"
-                          min="10"
-                          max="100"
-                          step="5"
-                          value={imageSize}
-                          onChange={handleSizeChange}
-                          className="w-full h-2 bg-gray-200 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer"
-                          disabled={isLoading}
-                        />
-                      </div>
-                    )}
+                    <button
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="text-sm text-teal-600 dark:text-teal-400 hover:text-teal-500 dark:hover:text-teal-300 font-medium"
+                      disabled={isLoading}
+                    >
+                      Change Image
+                    </button>
                   </div>
                 </div>
               )}
@@ -448,7 +638,7 @@ export default function ClubCreatePage() {
             <div className="flex gap-3">
               <button
                 type="button"
-                onClick={clearMessages}
+                onClick={clearForm}
                 className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={isLoading}
               >
@@ -486,6 +676,259 @@ export default function ClubCreatePage() {
           </div>
         </div>
       </div>
+
+      {/* Image Editor Modal */}
+      {showImageEditor && originalImagePreview && (
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-75 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-lg max-w-4xl w-full max-h-full overflow-auto">
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Edit Image</h3>
+                <button
+                  onClick={() => setShowImageEditor(false)}
+                  className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+
+              {/* Image Preview Area */}
+              <div className="relative bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden mb-4 mx-auto" style={{ width: '600px', height: '400px' }}>
+                <img
+                  ref={imageRef}
+                  src={originalImagePreview}
+                  alt="Original"
+                  className="absolute inset-0 w-full h-full object-contain"
+                  style={{
+                    transform: `scale(${cropData.scale}) rotate(${cropData.rotation}deg)`,
+                    transformOrigin: 'center'
+                  }}
+                />
+                
+                {/* Crop Overlay */}
+                <div
+                  className="absolute border-2 border-teal-500 bg-teal-500 bg-opacity-20 cursor-move"
+                  style={{
+                    left: `${cropData.x}px`,
+                    top: `${cropData.y}px`,
+                    width: `${cropData.width}px`,
+                    height: `${cropData.height}px`,
+                    minWidth: '100px',
+                    minHeight: '100px'
+                  }}
+                >
+                  <div className="absolute inset-0 border border-white opacity-50"></div>
+                  {/* Corner indicators */}
+                  <div className="absolute -top-1 -left-1 w-3 h-3 bg-teal-500 border border-white"></div>
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-teal-500 border border-white"></div>
+                  <div className="absolute -bottom-1 -left-1 w-3 h-3 bg-teal-500 border border-white"></div>
+                  <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-teal-500 border border-white"></div>
+                </div>
+              </div>
+
+              {/* Controls */}
+              <div className="space-y-4">
+                {/* Scale Control */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Scale: {Math.round(cropData.scale * 100)}%
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <ZoomOut className="w-4 h-4 text-gray-500" />
+                    <input
+                      type="range"
+                      min="0.1"
+                      max="3"
+                      step="0.1"
+                      value={cropData.scale}
+                      onChange={handleScaleChange}
+                      className="flex-1"
+                    />
+                    <ZoomIn className="w-4 h-4 text-gray-500" />
+                  </div>
+                </div>
+
+                {/* Rotation Controls */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Rotation: {cropData.rotation}°
+                  </label>
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => handleRotationChange('left')}
+                      className="flex items-center px-3 py-1 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-300 dark:hover:bg-gray-500"
+                    >
+                      <RotateCw className="w-4 h-4 mr-1 transform scale-x-[-1]" />
+                      90° Left
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleRotationChange('right')}
+                      className="flex items-center px-3 py-1 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-300 dark:hover:bg-gray-500"
+                    >
+                      <RotateCw className="w-4 h-4 mr-1" />
+                      90° Right
+                    </button>
+                  </div>
+                </div>
+
+                {/* Crop Position Controls */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      X Position: {cropData.x}px
+                    </label>
+                    <input
+                      type="range"
+                      min="0"
+                      max="400"
+                      step="5"
+                      value={cropData.x}
+                      onChange={(e) => setCropData(prev => ({ ...prev, x: Number(e.target.value) }))}
+                      className="w-full"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Y Position: {cropData.y}px
+                    </label>
+                    <input
+                      type="range"
+                      min="0"
+                      max="300"
+                      step="5"
+                      value={cropData.y}
+                      onChange={(e) => setCropData(prev => ({ ...prev, y: Number(e.target.value) }))}
+                      className="w-full"
+                    />
+                  </div>
+                </div>
+
+                {/* Crop Size Controls */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Width: {cropData.width}px
+                    </label>
+                    <input
+                      type="range"
+                      min="100"
+                      max="600"
+                      step="10"
+                      value={cropData.width}
+                      onChange={(e) => handleCropSizeChange('width', Number(e.target.value))}
+                      className="w-full"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Height: {cropData.height}px
+                    </label>
+                    <input
+                      type="range"
+                      min="100"
+                      max="400"
+                      step="10"
+                      value={cropData.height}
+                      onChange={(e) => handleCropSizeChange('height', Number(e.target.value))}
+                      className="w-full"
+                    />
+                  </div>
+                </div>
+
+                {/* Preset Crop Ratios */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Quick Ratios
+                  </label>
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setCropData(prev => ({ ...prev, width: 300, height: 300 }))}
+                      className="px-3 py-1 text-sm bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-300 dark:hover:bg-gray-500"
+                    >
+                      1:1 Square
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setCropData(prev => ({ ...prev, width: 400, height: 300 }))}
+                      className="px-3 py-1 text-sm bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-300 dark:hover:bg-gray-500"
+                    >
+                      4:3 Standard
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setCropData(prev => ({ ...prev, width: 480, height: 270 }))}
+                      className="px-3 py-1 text-sm bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-300 dark:hover:bg-gray-500"
+                    >
+                      16:9 Wide
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setCropData(prev => ({ ...prev, width: 300, height: 400 }))}
+                      className="px-3 py-1 text-sm bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-300 dark:hover:bg-gray-500"
+                    >
+                      3:4 Portrait
+                    </button>
+                  </div>
+                </div>
+
+                {/* Preview of Cropped Result */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Crop Preview
+                  </label>
+                  <div className="flex justify-center">
+                    <div 
+                      className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden bg-gray-50 dark:bg-gray-700"
+                      style={{ width: `${Math.min(cropData.width, 200)}px`, height: `${Math.min(cropData.height, 150)}px` }}
+                    >
+                      <div 
+                        className="w-full h-full bg-center bg-no-repeat"
+                        style={{
+                          backgroundImage: `url(${originalImagePreview})`,
+                          backgroundSize: `${600 * cropData.scale}px ${400 * cropData.scale}px`,
+                          backgroundPosition: `-${cropData.x * (Math.min(cropData.width, 200) / cropData.width)}px -${cropData.y * (Math.min(cropData.height, 150) / cropData.height)}px`,
+                          transform: `rotate(${cropData.rotation}deg)`
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex gap-3 pt-4">
+                  <button
+                    type="button"
+                    onClick={resetCrop}
+                    className="px-4 py-2 text-sm bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors"
+                  >
+                    Reset
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setShowImageEditor(false)}
+                    className="px-4 py-2 text-sm bg-gray-500 text-white rounded hover:bg-gray-600 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    onClick={applyCrop}
+                    className="px-4 py-2 text-sm bg-teal-600 text-white rounded hover:bg-teal-700 transition-colors"
+                  >
+                    Apply Crop
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Hidden Canvas for Image Processing */}
+      <canvas ref={canvasRef} className="hidden" />
     </div>
   );
 }
