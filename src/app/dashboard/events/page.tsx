@@ -112,7 +112,7 @@ function EventCard({ event, onLearnMore }: { event: Event, onLearnMore: () => vo
       </CardHeader>
       
       <CardContent className="flex-grow">
-        <p className="text-gray-700 dark:text-gray-300 line-clamp-3">
+        <p className="line-clamp-3">              
           {event.description}
         </p>
       </CardContent>

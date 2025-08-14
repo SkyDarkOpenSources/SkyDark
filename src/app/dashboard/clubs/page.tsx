@@ -85,7 +85,7 @@ export default function ClubsPage() {
       <div className="container mx-auto py-12 px-4 flex justify-center items-center min-h-[400px]">
         <div className="flex flex-col items-center gap-4">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600"></div>
-          <p className="text-gray-600">Loading clubs...</p>
+          <p>Loading clubs...</p>
         </div>
       </div>
     );
@@ -109,7 +109,7 @@ export default function ClubsPage() {
       {/* Header Section */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Space-Tech Clubs</h1>
+          <h1 className="text-3xl font-bold mb-2">Space-Tech Clubs</h1>
           <p className="text-gray-600">Explore and join clubs that interest you.</p>
         </div>
         <Button asChild>
