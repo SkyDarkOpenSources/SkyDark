@@ -134,7 +134,7 @@ export default async function HomePage() {
                 },
                 {
                   name: "Achyut Paliwal",
-                  role: "CEO of SkyDark",
+                  role: "Founder and CEO of SkyDark",
                   content:
                     "SkyDark has revolutionized how we approach our projects. The interface is intuitive and the performance is outstanding!",
                   rating: 3,

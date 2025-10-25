@@ -2,9 +2,8 @@
 
 import { useState, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
 import { createClub } from '../../../../lib/actions/club.action';
-import { Upload, X, AlertCircle, Maximize2, Minimize2, RotateCw, Crop, ZoomIn, ZoomOut, Move, Square } from 'lucide-react';
+import { Upload, X, AlertCircle, Maximize2, Minimize2, RotateCw, Crop, ZoomIn, ZoomOut } from 'lucide-react';
 
 interface FormData {
   name: string;
