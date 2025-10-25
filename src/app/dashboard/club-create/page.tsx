@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useCallback } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { createClub } from '../../../../lib/actions/club.action';
 import { Upload, X, AlertCircle, Maximize2, Minimize2, RotateCw, Crop, ZoomIn, ZoomOut } from 'lucide-react';
@@ -564,7 +565,7 @@ export default function ClubCreatePage() {
                   {isExpanded ? (
                     <div className="fixed inset-0 z-50 bg-black bg-opacity-90 flex items-center justify-center p-4">
                       <div className="relative max-w-full max-h-full">
-                        <img
+                        <Image
                           src={imagePreview}
                           alt="Club preview"
                           className="max-w-full max-h-full object-contain"
@@ -579,7 +580,7 @@ export default function ClubCreatePage() {
                     </div>
                   ) : (
                     <div className="relative w-full bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden" style={{ height: '300px' }}>
-                      <img
+                      <Image
                         src={imagePreview}
                         alt="Club preview"
                         className="w-full h-full object-cover"
@@ -693,7 +694,7 @@ export default function ClubCreatePage() {
 
               {/* Image Preview Area */}
               <div className="relative bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden mb-4 mx-auto" style={{ width: '600px', height: '400px' }}>
-                <img
+                <Image
                   ref={imageRef}
                   src={originalImagePreview}
                   alt="Original"

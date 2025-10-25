@@ -16,7 +16,7 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { Plus, Calendar, Users, Upload, X, FileImage } from "lucide-react";
+import { Plus, Calendar, Users, Upload, X } from "lucide-react";
 import { getAllEvents, createEvent } from "../../../../lib/actions/event.action";
 import { Event } from "../../../../database/schema";
 
