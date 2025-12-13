@@ -126,7 +126,7 @@ export default async function HomePage() {
             <div className="grid md:grid-cols-3 gap-8">
               {[
                 {
-                  name: "Mike Chen",
+                  name: "Mike Chan",
                   role: "Developer",
                   content:
                     "The best platform I've ever used. Clean, fast, and reliable. Plus, the free pricing model is incredible!",
