@@ -5,6 +5,7 @@ import Footer from "@/components/footer";
 import { founders } from "@/data/data";
 import Image from "next/image";
 import { useState } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 export default function About() {
   const [selectedFounder, setSelectedFounder] = useState<null | (typeof founders)[0]>(null);
@@ -122,6 +123,29 @@ export default function About() {
       </div>
 
       {/* Founder Modal */}
+      <Dialog open={!!selectedFounder} onOpenChange={(open) => !open && setSelectedFounder(null)}>
+        {selectedFounder && (
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle className="text-2xl">{selectedFounder.name}</DialogTitle>
+            </DialogHeader>
+            <div className="flex items-start space-x-4">
+              <div className="relative h-24 w-24 rounded-full overflow-hidden flex-shrink-0">
+                <Image
+                  src={selectedFounder.image}
+                  alt={selectedFounder.name}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-muted-foreground mb-2">{selectedFounder.role}</p>
+                <p className="text-sm text-muted-foreground leading-relaxed">{selectedFounder.bio}</p>
+              </div>
+            </div>
+          </DialogContent>
+        )}
+      </Dialog>
     </div>
   );
 }
