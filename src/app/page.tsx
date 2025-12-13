@@ -120,8 +120,8 @@ export default async function HomePage() {
         <section className="py-20 px-4 bg-gradient-to-br from-purple-600 via-blue-600 to-cyan-600 text-white">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-white mb-4">What out team has to tell!</h2>
-              <p className="text-xl text-blue-100">Don&apos;t just take our word for it</p>
+              <h2 className="text-4xl font-bold text-white mb-4">What out team has to say!</h2>
+              <p className="text-xl text-blue-100">Don&apos;t just take our word for it.</p>
             </div>
             <div className="grid md:grid-cols-3 gap-8">
               {[
