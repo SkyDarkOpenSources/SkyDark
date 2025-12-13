@@ -121,7 +121,7 @@ export default async function HomePage() {
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold text-white mb-4">What out team has to tell!</h2>
-              <p className="text-xl text-blue-100">Don&apos;t just take our word for it</p>
+              <p className="text-xl text-blue-100">Don&apos;t just take our word for it.</p>
             </div>
             <div className="grid md:grid-cols-3 gap-8">
               {[
