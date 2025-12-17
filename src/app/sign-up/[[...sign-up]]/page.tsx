@@ -341,7 +341,7 @@ export default function SignUpPage() {
                 Join SkyDark
               </h1>
               <p className="text-muted-foreground">
-                Create your account to get started
+                Create your account to get started!
               </p>
             </div>
 
