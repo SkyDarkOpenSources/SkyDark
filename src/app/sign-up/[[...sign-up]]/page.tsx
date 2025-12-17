@@ -1,97 +1,105 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react'
-import { useSignUp } from '@clerk/nextjs'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Eye, EyeOff, Mail, Lock, User, Shield } from 'lucide-react'
+import { useState, useEffect } from "react";
+import { useSignUp, useAuth } from "@clerk/nextjs";
+import { redirect, useRouter } from "next/navigation";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Eye, EyeOff, Mail, Lock, User, Shield } from "lucide-react";
 
 interface ClerkError {
   errors?: Array<{
-    message: string
-    code?: string
-  }>
+    message: string;
+    code?: string;
+  }>;
 }
 
-type SignUpStep = 'initial' | 'verification' | 'oauth-username'
+type SignUpStep = "initial" | "verification" | "oauth-username";
 
 export default function SignUpPage() {
-  const { isLoaded, signUp, setActive } = useSignUp()
-  const [step, setStep] = useState<SignUpStep>('initial')
-  const [username, setUsername] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [verificationCode, setVerificationCode] = useState('')
-  const [showPassword, setShowPassword] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState('')
+  const { isLoaded, signUp, setActive } = useSignUp();
+  const [step, setStep] = useState<SignUpStep>("initial");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [verificationCode, setVerificationCode] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const {isSignedIn} = useAuth()
+  const [error, setError] = useState("");
   const [oauthUserInfo, setOauthUserInfo] = useState<{
-    email: string
-    firstName: string
-    lastName: string
-  }>({ email: '', firstName: '', lastName: '' })
-  const router = useRouter()
+    email: string;
+    firstName: string;
+    lastName: string;
+  }>({ email: "", firstName: "", lastName: "" });
+  const router = useRouter();
 
   // Check OAuth status on component mount and when signUp changes
   useEffect(() => {
-    if (!isLoaded || !signUp) return
+    if (!isLoaded || !signUp) return;
 
     const checkSignUpStatus = async () => {
       try {
         // Check if we have a pending sign up that needs completion
-        if (signUp.status === 'missing_requirements') {
-          const missingFields = signUp.missingFields || []
-          
+        if (signUp.status === "missing_requirements") {
+          const missingFields = signUp.missingFields || [];
+
           // If username is missing, user came from OAuth and needs to set username
-          if (missingFields.includes('username')) {
+          if (missingFields.includes("username")) {
             // Try to get user information from the sign up object
             try {
-              const emailAddresses = (signUp as unknown as { emailAddresses?: Array<{ emailAddress: string }> }).emailAddresses || []
-              const firstName = (signUp as unknown as { firstName?: string }).firstName || ''
-              const lastName = (signUp as unknown as { lastName?: string }).lastName || ''
-              
+              const emailAddresses =
+                (
+                  signUp as unknown as {
+                    emailAddresses?: Array<{ emailAddress: string }>;
+                  }
+                ).emailAddresses || [];
+              const firstName =
+                (signUp as unknown as { firstName?: string }).firstName || "";
+              const lastName =
+                (signUp as unknown as { lastName?: string }).lastName || "";
+
               setOauthUserInfo({
-                email: emailAddresses[0]?.emailAddress || '',
-                firstName: firstName || '',
-                lastName: lastName || ''
-              })
-              
-              setStep('oauth-username')
+                email: emailAddresses[0]?.emailAddress || "",
+                firstName: firstName || "",
+                lastName: lastName || "",
+              });
+
+              setStep("oauth-username");
             } catch (infoError) {
-              console.log('Could not extract user info:', infoError)
-              setStep('oauth-username')
+              console.log("Could not extract user info:", infoError);
+              setStep("oauth-username");
             }
           }
           // If email verification is needed
-          else if ((signUp.unverifiedFields || []).includes('email_address')) {
-            setStep('verification')
+          else if ((signUp.unverifiedFields || []).includes("email_address")) {
+            setStep("verification");
           }
         }
         // If sign up is already complete, redirect to dashboard
-        else if (signUp.status === 'complete') {
-          await setActive({ session: signUp.createdSessionId })
-          router.push('/dashboard')
+        else if (signUp.status === "complete") {
+          await setActive({ session: signUp.createdSessionId });
+          router.push("/dashboard");
         }
       } catch (statusError) {
-        console.log('Error checking sign up status:', statusError)
+        console.log("Error checking sign up status:", statusError);
       }
-    }
+    };
 
     // Small delay to ensure Clerk has loaded properly
-    const timeoutId = setTimeout(checkSignUpStatus, 100)
-    return () => clearTimeout(timeoutId)
-  }, [isLoaded, signUp, setActive, router])
+    const timeoutId = setTimeout(checkSignUpStatus, 100);
+    return () => clearTimeout(timeoutId);
+  }, [isLoaded, signUp, setActive, router]);
 
   const handleInitialSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!isLoaded || !signUp) return
+    e.preventDefault();
+    if (!isLoaded || !signUp) return;
 
-    setIsLoading(true)
-    setError('')
+    setIsLoading(true);
+    setError("");
 
     try {
       // Create the sign up attempt
@@ -99,95 +107,104 @@ export default function SignUpPage() {
         username: username.trim(),
         emailAddress: email.trim(),
         password,
-      })
+      });
 
       // Check if email verification is needed
-      if (result.unverifiedFields?.includes('email_address')) {
-        await signUp.prepareEmailAddressVerification({ 
-          strategy: 'email_code'
-        })
-        setStep('verification')
-      } else if (result.status === 'complete') {
-        await setActive({ session: result.createdSessionId })
-        router.push('/dashboard')
+      if (result.unverifiedFields?.includes("email_address")) {
+        await signUp.prepareEmailAddressVerification({
+          strategy: "email_code",
+        });
+        setStep("verification");
+      } else if (result.status === "complete") {
+        await setActive({ session: result.createdSessionId });
+        router.push("/dashboard");
       } else {
         // Fallback - try to prepare verification anyway
         try {
-          await signUp.prepareEmailAddressVerification({ 
-            strategy: 'email_code'
-          })
-          setStep('verification')
+          await signUp.prepareEmailAddressVerification({
+            strategy: "email_code",
+          });
+          setStep("verification");
         } catch (verifyErr) {
-          console.error('Verification setup error:', verifyErr)
-          setError('Account created but verification setup failed. Please try signing in.')
+          console.error("Verification setup error:", verifyErr);
+          setError(
+            "Account created but verification setup failed. Please try signing in."
+          );
         }
       }
     } catch (err: unknown) {
-      const clerkError = err as ClerkError
-      let errorMessage = 'An error occurred during sign up.'
-      
+      const clerkError = err as ClerkError;
+      let errorMessage = "An error occurred during sign up.";
+
       if (clerkError.errors?.[0]?.message) {
-        errorMessage = clerkError.errors[0].message
+        errorMessage = clerkError.errors[0].message;
       }
-      
+
       // Handle specific error types
-      if (errorMessage.toLowerCase().includes('captcha')) {
-        errorMessage = 'Please complete the security verification and try again.'
-      } else if (errorMessage.toLowerCase().includes('username')) {
-        errorMessage = 'This username is already taken. Please choose another.'
-      } else if (errorMessage.toLowerCase().includes('email')) {
-        errorMessage = 'This email is already registered. Please use a different email or sign in.'
+      if (errorMessage.toLowerCase().includes("captcha")) {
+        errorMessage =
+          "Please complete the security verification and try again.";
+      } else if (errorMessage.toLowerCase().includes("username")) {
+        errorMessage = "This username is already taken. Please choose another.";
+      } else if (errorMessage.toLowerCase().includes("email")) {
+        errorMessage =
+          "This email is already registered. Please use a different email or sign in.";
       }
-      
-      setError(errorMessage)
-      console.error('Sign up error:', err)
+
+      setError(errorMessage);
+      console.error("Sign up error:", err);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const handleVerificationSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!isLoaded || !signUp) return
+    e.preventDefault();
+    if (!isLoaded || !signUp) return;
 
-    setIsLoading(true)
-    setError('')
+    setIsLoading(true);
+    setError("");
 
     try {
       const result = await signUp.attemptEmailAddressVerification({
         code: verificationCode.trim(),
-      })
+      });
 
-      if (result.status === 'complete') {
-        await setActive({ session: result.createdSessionId })
-        router.push('/dashboard')
+      if (result.status === "complete") {
+        await setActive({ session: result.createdSessionId });
+        router.push("/dashboard");
       } else {
-        setError('Verification incomplete. Please check your code and try again.')
+        setError(
+          "Verification incomplete. Please check your code and try again."
+        );
       }
     } catch (err: unknown) {
-      const clerkError = err as ClerkError
-      let errorMessage = 'Invalid verification code. Please try again.'
-      
+      const clerkError = err as ClerkError;
+      let errorMessage = "Invalid verification code. Please try again.";
+
       if (clerkError.errors?.[0]?.message) {
-        errorMessage = clerkError.errors[0].message
+        errorMessage = clerkError.errors[0].message;
       }
-      
-      if (errorMessage.toLowerCase().includes('expired')) {
-        errorMessage = 'Verification code has expired. Please request a new one.'
+
+      if (errorMessage.toLowerCase().includes("expired")) {
+        errorMessage =
+          "Verification code has expired. Please request a new one.";
       }
-      
-      setError(errorMessage)
-      console.error('Verification error:', err)
+
+      setError(errorMessage);
+      console.error("Verification error:", err);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
-  const handleOAuthSignUp = async (strategy: 'oauth_google' | 'oauth_microsoft') => {
-    if (!isLoaded || !signUp) return
+  const handleOAuthSignUp = async (
+    strategy: "oauth_google" | "oauth_microsoft"
+  ) => {
+    if (!isLoaded || !signUp) return;
 
-    setIsLoading(true)
-    setError('')
+    setIsLoading(true);
+    setError("");
 
     try {
       // Start OAuth flow with proper redirect URLs
@@ -195,102 +212,115 @@ export default function SignUpPage() {
         strategy,
         redirectUrl: `${window.location.origin}/sign-up`,
         redirectUrlComplete: `${window.location.origin}/sign-up`,
-      })
+      });
     } catch (err: unknown) {
-      const clerkError = err as ClerkError
-      let errorMessage = 'Social sign up failed. Please try again.'
-      
+      const clerkError = err as ClerkError;
+      let errorMessage = "Social sign up failed. Please try again.";
+
       if (clerkError.errors?.[0]?.message) {
-        errorMessage = clerkError.errors[0].message
+        errorMessage = clerkError.errors[0].message;
       }
-      
-      if (errorMessage.toLowerCase().includes('popup')) {
-        errorMessage = 'Please allow popups for this site and try again.'
-      } else if (errorMessage.toLowerCase().includes('captcha')) {
-        errorMessage = 'Please complete the security verification and try again.'
+
+      if (errorMessage.toLowerCase().includes("popup")) {
+        errorMessage = "Please allow popups for this site and try again.";
+      } else if (errorMessage.toLowerCase().includes("captcha")) {
+        errorMessage =
+          "Please complete the security verification and try again.";
       }
-      
-      setError(errorMessage)
-      console.error('OAuth error:', err)
-      setIsLoading(false)
+
+      setError(errorMessage);
+      console.error("OAuth error:", err);
+      setIsLoading(false);
     }
-  }
+  };
 
   const handleOAuthUsernameSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!isLoaded || !signUp) return
+    e.preventDefault();
+    if (!isLoaded || !signUp) return;
 
-    setIsLoading(true)
-    setError('')
+    setIsLoading(true);
+    setError("");
 
     try {
       // Update the sign up with the chosen username
       const result = await signUp.update({
         username: username.trim(),
-      })
-      
-      if (result.status === 'complete') {
-        await setActive({ session: result.createdSessionId })
-        router.push('/dashboard')
+      });
+
+      if (result.status === "complete") {
+        await setActive({ session: result.createdSessionId });
+        router.push("/dashboard");
       } else {
         // If still not complete, try one more time
         try {
-          const finalResult = await signUp.reload()
-          if (finalResult.status === 'complete') {
-            await setActive({ session: finalResult.createdSessionId })
-            router.push('/dashboard')
+          const finalResult = await signUp.reload();
+          if (finalResult.status === "complete") {
+            await setActive({ session: finalResult.createdSessionId });
+            router.push("/dashboard");
           } else {
-            setError('Failed to complete account setup. Please try refreshing the page.')
+            setError(
+              "Failed to complete account setup. Please try refreshing the page."
+            );
           }
         } catch (reloadErr) {
-          console.error('Account setup reload error:', reloadErr)
-          setError('Account setup incomplete. Please try refreshing the page or contact support.')
+          console.error("Account setup reload error:", reloadErr);
+          setError(
+            "Account setup incomplete. Please try refreshing the page or contact support."
+          );
         }
       }
     } catch (err: unknown) {
-      const clerkError = err as ClerkError
-      let errorMessage = 'Failed to set username. Please try again.'
-      
+      const clerkError = err as ClerkError;
+      let errorMessage = "Failed to set username. Please try again.";
+
       if (clerkError.errors?.[0]?.message) {
-        errorMessage = clerkError.errors[0].message
+        errorMessage = clerkError.errors[0].message;
       }
-      
-      if (errorMessage.toLowerCase().includes('username')) {
-        errorMessage = 'This username is already taken. Please choose another.'
+
+      if (errorMessage.toLowerCase().includes("username")) {
+        errorMessage = "This username is already taken. Please choose another.";
       }
-      
-      setError(errorMessage)
-      console.error('OAuth username error:', err)
+
+      setError(errorMessage);
+      console.error("OAuth username error:", err);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const resendVerificationCode = async () => {
-    if (!isLoaded || !signUp) return
+    if (!isLoaded || !signUp) return;
 
-    setIsLoading(true)
-    setError('')
+    setIsLoading(true);
+    setError("");
 
     try {
-      await signUp.prepareEmailAddressVerification({ 
-        strategy: 'email_code'
-      })
-      setError('') // Clear any previous errors on successful resend
+      await signUp.prepareEmailAddressVerification({
+        strategy: "email_code",
+      });
+      setError(""); // Clear any previous errors on successful resend
     } catch (err: unknown) {
-      const clerkError = err as ClerkError
-      const errorMessage = clerkError.errors?.[0]?.message || 'Failed to resend verification code.'
-      setError(errorMessage)
-      console.error('Resend error:', err)
+      const clerkError = err as ClerkError;
+      const errorMessage =
+        clerkError.errors?.[0]?.message ||
+        "Failed to resend verification code.";
+      setError(errorMessage);
+      console.error("Resend error:", err);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const handleBackToInitial = () => {
-    setStep('initial')
-    setVerificationCode('')
-    setError('')
+    setStep("initial");
+    setVerificationCode("");
+    setError("");
+  };
+
+  if (isSignedIn) {
+    return (
+      redirect("/dashboard")
+    );
   }
 
   if (!isLoaded) {
@@ -298,16 +328,18 @@ export default function SignUpPage() {
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
-    )
+    );
   }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
       <div className="w-full max-w-md space-y-6 p-6 sm:p-8 rounded-lg bg-card">
-        {step === 'initial' && (
+        {step === "initial" && (
           <>
             <div className="text-center">
-              <h1 className="text-3xl font-bold mb-2 text-card-foreground">Join SkyDark</h1>
+              <h1 className="text-3xl font-bold mb-2 text-card-foreground">
+                Join SkyDark
+              </h1>
               <p className="text-muted-foreground">
                 Create your account to get started
               </p>
@@ -324,7 +356,7 @@ export default function SignUpPage() {
               <Button
                 variant="outline"
                 className="w-1/2 bg-background hover:bg-muted transition-colors"
-                onClick={() => handleOAuthSignUp('oauth_google')}
+                onClick={() => handleOAuthSignUp("oauth_google")}
                 disabled={isLoading}
                 type="button"
               >
@@ -351,7 +383,7 @@ export default function SignUpPage() {
               <Button
                 variant="outline"
                 className="w-1/2 bg-background hover:bg-muted transition-colors"
-                onClick={() => handleOAuthSignUp('oauth_microsoft')}
+                onClick={() => handleOAuthSignUp("oauth_microsoft")}
                 disabled={isLoading}
                 type="button"
               >
@@ -380,7 +412,10 @@ export default function SignUpPage() {
             {/* Sign Up Form */}
             <form onSubmit={handleInitialSubmit} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="username" className="text-sm font-medium text-card-foreground">
+                <Label
+                  htmlFor="username"
+                  className="text-sm font-medium text-card-foreground"
+                >
                   Username
                 </Label>
                 <div className="relative">
@@ -399,7 +434,10 @@ export default function SignUpPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-medium text-card-foreground">
+                <Label
+                  htmlFor="email"
+                  className="text-sm font-medium text-card-foreground"
+                >
                   Email
                 </Label>
                 <div className="relative">
@@ -418,7 +456,10 @@ export default function SignUpPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-sm font-medium text-card-foreground">
+                <Label
+                  htmlFor="password"
+                  className="text-sm font-medium text-card-foreground"
+                >
                   Password
                 </Label>
                 <div className="relative">
@@ -426,7 +467,7 @@ export default function SignUpPage() {
                   <Input
                     id="password"
                     placeholder="Enter your password"
-                    type={showPassword ? 'text' : 'password'}
+                    type={showPassword ? "text" : "password"}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
@@ -440,18 +481,27 @@ export default function SignUpPage() {
                     onClick={() => setShowPassword(!showPassword)}
                     disabled={isLoading}
                   >
-                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
                   </button>
                 </div>
               </div>
 
               {/* CAPTCHA Container - Required by Clerk */}
-              <div id="clerk-captcha" className="flex justify-center my-4"></div>
+              <div
+                id="clerk-captcha"
+                className="flex justify-center my-4"
+              ></div>
 
               <Button
                 type="submit"
                 className="w-full mt-6"
-                disabled={isLoading || !username.trim() || !email.trim() || !password}
+                disabled={
+                  isLoading || !username.trim() || !email.trim() || !password
+                }
               >
                 {isLoading ? (
                   <>
@@ -459,14 +509,16 @@ export default function SignUpPage() {
                     Sending verification code...
                   </>
                 ) : (
-                  'Get Verification Code'
+                  "Get Verification Code"
                 )}
               </Button>
             </form>
 
             {/* Sign in link at bottom */}
             <div className="text-center text-sm pt-4 border-t">
-              <p className="text-muted-foreground mb-1">Already have an account?</p>
+              <p className="text-muted-foreground mb-1">
+                Already have an account?
+              </p>
               <Link
                 href="/sign-in"
                 className="text-primary hover:text-primary/80 font-medium transition-colors"
@@ -477,12 +529,15 @@ export default function SignUpPage() {
           </>
         )}
 
-        {step === 'verification' && (
+        {step === "verification" && (
           <>
             <div className="text-center">
-              <h1 className="text-3xl font-bold mb-2 text-card-foreground">Verify Your Email</h1>
+              <h1 className="text-3xl font-bold mb-2 text-card-foreground">
+                Verify Your Email
+              </h1>
               <p className="text-muted-foreground">
-                We sent a verification code to <span className="font-medium">{email}</span>
+                We sent a verification code to{" "}
+                <span className="font-medium">{email}</span>
               </p>
             </div>
 
@@ -494,7 +549,10 @@ export default function SignUpPage() {
 
             <form onSubmit={handleVerificationSubmit} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="verificationCode" className="text-sm font-medium text-card-foreground">
+                <Label
+                  htmlFor="verificationCode"
+                  className="text-sm font-medium text-card-foreground"
+                >
                   Verification Code
                 </Label>
                 <div className="relative">
@@ -504,7 +562,11 @@ export default function SignUpPage() {
                     placeholder="Enter 6-digit code"
                     type="text"
                     value={verificationCode}
-                    onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                    onChange={(e) =>
+                      setVerificationCode(
+                        e.target.value.replace(/\D/g, "").slice(0, 6)
+                      )
+                    }
                     required
                     maxLength={6}
                     className="pl-10 bg-muted/50 hover:bg-muted/70 focus:bg-muted/70 transition-colors border-0 shadow-none text-center text-lg tracking-wider"
@@ -524,7 +586,7 @@ export default function SignUpPage() {
                     Verifying...
                   </>
                 ) : (
-                  'Verify & Create Account'
+                  "Verify & Create Account"
                 )}
               </Button>
 
@@ -537,7 +599,7 @@ export default function SignUpPage() {
                 >
                   ← Back to sign up
                 </button>
-                
+
                 <button
                   type="button"
                   onClick={resendVerificationCode}
@@ -551,7 +613,9 @@ export default function SignUpPage() {
 
             {/* Sign in link at bottom */}
             <div className="text-center text-sm pt-4 border-t">
-              <p className="text-muted-foreground mb-1">Already have an account?</p>
+              <p className="text-muted-foreground mb-1">
+                Already have an account?
+              </p>
               <Link
                 href="/sign-in"
                 className="text-primary hover:text-primary/80 font-medium transition-colors"
@@ -562,15 +626,16 @@ export default function SignUpPage() {
           </>
         )}
 
-        {step === 'oauth-username' && (
+        {step === "oauth-username" && (
           <>
             <div className="text-center">
-              <h1 className="text-3xl font-bold mb-2 text-card-foreground">Choose Your Username</h1>
+              <h1 className="text-3xl font-bold mb-2 text-card-foreground">
+                Choose Your Username
+              </h1>
               <p className="text-muted-foreground">
-                {oauthUserInfo.firstName 
+                {oauthUserInfo.firstName
                   ? `Welcome ${oauthUserInfo.firstName}! Please choose a username to complete your account.`
-                  : 'Please choose a username to complete your account setup.'
-                }
+                  : "Please choose a username to complete your account setup."}
               </p>
               {oauthUserInfo.email && (
                 <p className="text-sm text-muted-foreground mt-1">
@@ -587,7 +652,10 @@ export default function SignUpPage() {
 
             <form onSubmit={handleOAuthUsernameSubmit} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="oauthUsername" className="text-sm font-medium text-card-foreground">
+                <Label
+                  htmlFor="oauthUsername"
+                  className="text-sm font-medium text-card-foreground"
+                >
                   Username
                 </Label>
                 <div className="relative">
@@ -619,14 +687,16 @@ export default function SignUpPage() {
                     Completing setup...
                   </>
                 ) : (
-                  'Complete Account Setup'
+                  "Complete Account Setup"
                 )}
               </Button>
             </form>
 
             {/* Sign in link at bottom */}
             <div className="text-center text-sm pt-4 border-t">
-              <p className="text-muted-foreground mb-1">Already have an account?</p>
+              <p className="text-muted-foreground mb-1">
+                Already have an account?
+              </p>
               <Link
                 href="/sign-in"
                 className="text-primary hover:text-primary/80 font-medium transition-colors"
@@ -638,5 +708,5 @@ export default function SignUpPage() {
         )}
       </div>
     </div>
-  )
+  );
 }

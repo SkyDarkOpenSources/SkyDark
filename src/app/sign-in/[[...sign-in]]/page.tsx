@@ -2,13 +2,14 @@
 
 import { useState } from 'react'
 import { useSignIn } from '@clerk/nextjs'
-import { useRouter } from 'next/navigation'
+import { redirect, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Eye, EyeOff, Mail, Lock } from 'lucide-react'
+import { useAuth } from '@clerk/nextjs'
 
 interface ClerkError {
   errors?: Array<{
@@ -24,6 +25,7 @@ export default function SignInPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const router = useRouter()
+  const {isSignedIn} = useAuth()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -69,6 +71,12 @@ export default function SignInPage() {
       setError(clerkError.errors?.[0]?.message || 'An error occurred during sign in.')
       setIsLoading(false)
     }
+  }
+
+  if(isSignedIn){
+    return(
+      redirect('/dashboard')
+    );
   }
 
   if (!isLoaded) {

@@ -1,8 +1,16 @@
 "use client";
-import { useUser } from "@clerk/nextjs";
+import { useUser, useAuth } from "@clerk/nextjs";
+import { redirect } from "next/navigation";
 
 export default function Dashboard() {
   const { user } = useUser();
+  const { isSignedIn } = useAuth()
+
+  if (!isSignedIn){
+    return(
+      redirect('sign-in')
+    );
+  }
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">
