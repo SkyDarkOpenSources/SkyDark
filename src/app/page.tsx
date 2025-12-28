@@ -40,7 +40,7 @@ export default async function HomePage() {
               </h1>
             </div>
             <p className="text-gray-400 text-xl text-center max-w-3xl leading-relaxed">
-              Dive into the world of aerospace technology with our open sourced-projects.
+              Dive into the world of aerospace technologies with our open sourced-projects.
               <br />
               <span className="text-cyan-400 font-semibold">Pricing? Just Kidding!</span> We got you covered. You don&apos;t
               need to worry about anything!
