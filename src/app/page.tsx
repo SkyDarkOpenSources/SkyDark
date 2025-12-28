@@ -98,7 +98,7 @@ export default async function HomePage() {
                   Free-Courses
                 </CardTitle>
                 <CardDescription className="text-gray-600 dark:text-gray-300">
-                  Our courses are designed to help you learn and grow in the field of aerospace technologies.
+                  Our courses are designed to help you learn and grow in the field of aerospace technology.
                 </CardDescription>
               </CardHeader>
             </Card>
