@@ -14,7 +14,9 @@ interface UserResult {
   emailAddress: string;
   imageUrl?: string;
   createdAt: number;
+  isPro?: boolean;
 }
+ 
 
 // Debounce function with proper typing
 function debounce<T extends (...args: never[]) => void | Promise<void>>(
@@ -176,8 +178,11 @@ export default function SearchPage() {
                     {/* User info on the left, Avatar on the right (Instagram style) */}
                     <div className="flex-1 flex items-center justify-between">
                       <div className="flex-1">
-                        <h3 className="font-medium text-base leading-none mb-1 group-hover:text-primary transition-colors">
-                          {user.username || "Unknown User"}
+                        <h3 className="font-medium text-base leading-none mb-1 group-hover:text-primary transition-colors flex items-center gap-2">
+                          <span>{user.username || "Unknown User"}</span>
+                          {user.isPro && (
+                            <Badge className="text-xs bg-gradient-to-r from-blue-500 to-purple-600 text-white">Pro</Badge>
+                          )}
                         </h3>
                         <p className="text-sm text-muted-foreground">
                           {user.emailAddress}

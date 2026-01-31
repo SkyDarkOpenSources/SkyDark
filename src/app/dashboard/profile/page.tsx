@@ -5,6 +5,8 @@ import { CalendarDays, Mail, Clock } from "lucide-react";
 import { ToggleTheme } from "@/components/ui/ToggleTheme";
 import { AvatarUpload } from "@/components/AvatarUpload";
 import { SettingsModal } from "@/components/SettingsModal";
+import ProBadge from '@/components/ProBadge';
+import { isProMember } from "../../../../lib/actions/pro.action";
 
 export default async function DashboardPage() {
   const { userId } = await auth();
@@ -26,6 +28,8 @@ export default async function DashboardPage() {
   const userEmail = user?.emailAddresses.find(e => e.id === user.primaryEmailAddressId)?.emailAddress || "No email";
   const userName = user?.fullName || "User";
 
+  const userIsPro = userEmail !== 'No email' ? await isProMember(userEmail) : false;
+
   return (
     <div className="flex-1 space-y-6 p-6">
       {/* Header */}
@@ -34,7 +38,10 @@ export default async function DashboardPage() {
           <h1 className="text-3xl font-bold tracking-tight">Profile</h1>
           <p className="text-muted-foreground">Manage your profile and settings</p>
         </div>
-        <SettingsModal userEmail={userEmail} userName={userName} />
+        <div className="flex items-center gap-4">
+          <ProBadge initialIsPro={userIsPro} />
+          <SettingsModal userEmail={userEmail} userName={userName} />
+        </div>
       </div>
 
       {/* User Profile Card */}

@@ -2,6 +2,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { currentUser, clerkClient } from "@clerk/nextjs/server";
 import type { User, EmailAddress } from "@clerk/nextjs/server";
+import { isProMember } from "../../../../../lib/actions/pro.action";
 
 interface UserResult {
   id: string;
@@ -9,6 +10,7 @@ interface UserResult {
   emailAddress: string;
   imageUrl?: string;
   createdAt: number;
+  isPro: boolean;
 }
 
 interface ClerkUserWithEmail extends User {
@@ -86,7 +88,8 @@ export async function GET(request: NextRequest) {
       .slice(0, 20); // Limit results to 20 for UI performance
 
     // Transform the user data to match frontend interface
-    const searchResults: UserResult[] = filteredUsers.map((clerkUser: ClerkUserWithEmail) => {
+    const limited = filteredUsers.slice(0, 20);
+    const mapped = await Promise.all(limited.map(async (clerkUser: ClerkUserWithEmail) => {
       // Get primary email address
       const primaryEmail = clerkUser.emailAddresses?.find(
         (email: EmailAddress) => email.id === clerkUser.primaryEmailAddressId
@@ -111,14 +114,19 @@ export async function GET(request: NextRequest) {
         username = 'Unknown User';
       }
 
+      const pro = await isProMember(emailAddress);
+
       return {
         id: clerkUser.id,
         username: clerkUser.username || username,
         emailAddress: emailAddress,
         imageUrl: clerkUser.imageUrl || undefined,
         createdAt: clerkUser.createdAt,
-      };
-    });
+        isPro: !!pro,
+      } as UserResult;
+    }));
+
+    const searchResults: UserResult[] = mapped;
 
     console.log(`Found ${allUsers.length} total users, returning ${searchResults.length} filtered results for query: "${query}"`);
 

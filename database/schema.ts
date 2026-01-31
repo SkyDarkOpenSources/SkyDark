@@ -39,8 +39,16 @@ export const events = pgTable('events', {
   updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow().$onUpdate(() => new Date()),
 });
 
+export const pro_members = pgTable('pro_members', {
+  id: uuid('id').primaryKey().notNull().defaultRandom(),
+  email: text('email').notNull().unique(),
+  addedAt: timestamp('added_at', { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow().$onUpdate(() => new Date()),
+});
+
 // Export the schema type
 export type User = typeof users.$inferSelect;
 export type Employee = typeof employees.$inferSelect;
 export type Club = typeof clubs.$inferSelect;
 export type Event = typeof events.$inferSelect;
+export type ProMember = typeof pro_members.$inferSelect;
