@@ -1,12 +1,13 @@
 import Link from 'next/link';
+import { Badge } from './ui/badge';
 
 export default function ProBadge({ initialIsPro }: { initialIsPro: boolean }) {
   return (
     <div className="flex items-center space-x-3">
       {initialIsPro ? (
-        <span className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider shadow-lg">
-          Pro
-        </span>
+        <Badge className="text-xs border-purple-600 bg-transparent rounded-full bg-opacity-20 px-2 py-0.5 font-semibold text-purple-600" variant="outline">
+          PRO
+        </Badge>
       ) : (
         <>
           <span className="px-3 py-1 rounded-lg text-xs font-semibold uppercase tracking-wide bg-muted text-muted-foreground">

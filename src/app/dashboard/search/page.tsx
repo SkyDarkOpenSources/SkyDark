@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import ProBadge from "@/components/ProBadge";
 
 interface UserResult {
   id: string;
@@ -181,7 +182,7 @@ export default function SearchPage() {
                         <h3 className="font-medium text-base leading-none mb-1 group-hover:text-primary transition-colors flex items-center gap-2">
                           <span>{user.username || "Unknown User"}</span>
                           {user.isPro && (
-                            <Badge className="text-xs bg-gradient-to-r from-blue-500 to-purple-600 text-white">Pro</Badge>
+                            <ProBadge initialIsPro={user.isPro} />
                           )}
                         </h3>
                         <p className="text-sm text-muted-foreground">
