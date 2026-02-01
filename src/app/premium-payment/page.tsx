@@ -1,35 +1,13 @@
 'use client';
-
-import { useEffect, useState } from 'react';
-import { loadStripe } from '@stripe/stripe-js';
-import { EmbeddedCheckoutProvider, EmbeddedCheckout } from '@stripe/react-stripe-js';
+import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 
 const StripePaymentPage = () => {
-  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/test_aFaaEWdt7dhm8J520b0Ba01';
 
-  useEffect(() => {
-    const fetchSessionId = async () => {
-      try {
-        const response = await fetch('/api/stripe/checkout-session', {
-          method: 'POST',
-        });
-        const data = await response.json();
-        
-        if (data.sessionId) {
-          setClientSecret(data.sessionId);
-        }
-      } catch (error) {
-        console.error('Error fetching session:', error);
-      }
-    };
-
-    fetchSessionId();
-  }, []);
-
-  const stripePromise = loadStripe(
-    process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
-  );
+  const handleCheckout = () => {
+    window.location.href = STRIPE_PAYMENT_LINK;
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -45,7 +23,6 @@ const StripePaymentPage = () => {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {/* Features List */}
             <div className="md:col-span-1 space-y-4">
               <Card className="p-6">
                 <h3 className="text-lg font-semibold mb-4">Pro Features</h3>
@@ -78,21 +55,19 @@ const StripePaymentPage = () => {
               </Card>
             </div>
 
-            {/* Stripe Embedded Checkout */}
             <div className="md:col-span-2">
               <Card className="p-6">
-                {clientSecret && stripePromise ? (
-                  <EmbeddedCheckoutProvider
-                    stripe={stripePromise}
-                    options={{ clientSecret }}
+                <div className="text-center">
+                  <h3 className="text-2xl font-bold mb-2">SkyDark Pro</h3>
+                  <p className="text-3xl font-bold mb-6">$9.99<span className="text-lg text-muted-foreground">/month</span></p>
+                  <Button 
+                    onClick={handleCheckout}
+                    size="lg"
+                    className="w-full"
                   >
-                    <EmbeddedCheckout />
-                  </EmbeddedCheckoutProvider>
-                ) : (
-                  <div className="flex items-center justify-center py-16">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-                  </div>
-                )}
+                    Start Your Subscription
+                  </Button>
+                </div>
               </Card>
             </div>
           </div>
