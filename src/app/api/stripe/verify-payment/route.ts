@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const userEmail = user?.emailAddresses?.[0]?.emailAddress || '';
+    const userEmail = user?.emailAddresses.find(e => e.id === user.primaryEmailAddressId)?.emailAddress || user?.emailAddresses?.[0]?.emailAddress || '';
     if (!userEmail) {
       return NextResponse.json({ error: 'No email found' }, { status: 400 });
     }

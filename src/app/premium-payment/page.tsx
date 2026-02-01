@@ -3,10 +3,22 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 
 const StripePaymentPage = () => {
-  const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/test_aFaaEWdt7dhm8J520b0Ba01';
-
-  const handleCheckout = () => {
-    window.location.href = STRIPE_PAYMENT_LINK;
+  const handleCheckout = async () => {
+    try {
+      const response = await fetch('/api/stripe/checkout-session', {
+        method: 'POST',
+      });
+      const data = await response.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        console.error('Failed to create checkout session:', data.error);
+        alert('Failed to start checkout. Please try again.');
+      }
+    } catch (error) {
+      console.error('Checkout error:', error);
+      alert('An error occurred. Please try again.');
+    }
   };
 
   return (

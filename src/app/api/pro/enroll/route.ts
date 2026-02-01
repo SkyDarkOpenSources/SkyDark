@@ -5,7 +5,7 @@ import { addProMember } from '../../../../../lib/actions/pro.action';
 export async function POST() {
   try {
     const user = await currentUser();
-    const email = user?.emailAddresses?.[0]?.emailAddress;
+    const email = user?.emailAddresses.find(e => e.id === user.primaryEmailAddressId)?.emailAddress || user?.emailAddresses?.[0]?.emailAddress;
     if (!email) {
       return NextResponse.json({ success: false, error: 'No email' }, { status: 400 });
     }

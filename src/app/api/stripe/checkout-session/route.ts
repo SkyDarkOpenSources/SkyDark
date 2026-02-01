@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const userEmail = user?.emailAddresses?.[0]?.emailAddress || '';
+    const userEmail = user?.emailAddresses.find(e => e.id === user.primaryEmailAddressId)?.emailAddress || user?.emailAddresses?.[0]?.emailAddress || '';
     if (!userEmail) {
       return NextResponse.json({ error: 'No email found' }, { status: 400 });
     }
@@ -31,6 +31,8 @@ export async function POST(request: NextRequest) {
     } else {
       customerId = customer.data[0].id;
     }
+
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 
     // Create checkout session
     const session = await stripe.checkout.sessions.create({
@@ -53,11 +55,11 @@ export async function POST(request: NextRequest) {
         },
       ],
       mode: 'subscription',
-      success_url: `${process.env.NEXT_PUBLIC_APP_URL}/premium-payment/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/premium-payment/cancel`,
+      success_url: `${appUrl}/premium-payment/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${appUrl}/premium-payment/cancel`,
     });
 
-    return NextResponse.json({ sessionId: session.id });
+    return NextResponse.json({ sessionId: session.id, url: session.url });
   } catch (error) {
     console.error('Checkout session error:', error);
     return NextResponse.json(
