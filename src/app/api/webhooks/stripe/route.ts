@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { addProMember } from '../../../../../lib/actions/pro.action';
+import { sendReceiptEmail } from '../../../../../lib/email';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
 export async function POST(request: NextRequest) {
@@ -34,6 +36,9 @@ export async function POST(request: NextRequest) {
         
         // Add to pro members
         await addProMember(email);
+        
+        // Send confirmation email
+        await sendReceiptEmail(email, session);
         
         console.log(`User ${email} upgraded to pro via Stripe`);
       }

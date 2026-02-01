@@ -2,8 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { currentUser } from '@clerk/nextjs/server';
 import Stripe from 'stripe';
 import { addProMember } from '../../../../../lib/actions/pro.action';
+import { sendReceiptEmail } from '../../../../../lib/email';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+
 
 export async function POST(request: NextRequest) {
   try {
@@ -43,8 +45,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // TODO: Send receipt email here (optional)
-    // await sendReceiptEmail(userEmail, session);
+    // Send receipt email
+    await sendReceiptEmail(userEmail, session);
+
 
     return NextResponse.json({ success: true });
   } catch (error) {
