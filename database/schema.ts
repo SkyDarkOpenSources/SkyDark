@@ -12,12 +12,11 @@ export const users = pgTable('users', {
 
 export const employees = pgTable('employees', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
-  clerkId: text("clerk_id").notNull().unique(),
-  username: text('username').notNull().unique(),
   email: text('email').notNull().unique(),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow().$onUpdate(() => new Date()),
 });
+
 
 export const clubs = pgTable('clubs', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),

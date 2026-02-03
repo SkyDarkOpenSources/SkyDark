@@ -55,7 +55,18 @@ const settingsItems = [
   },
 ]
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
+  isEmployee?: boolean
+}
+
+export function AppSidebar({ isEmployee = false, ...props }: AppSidebarProps) {
+  const filteredItems = items.filter(item => {
+    if (item.title === "Search Users") {
+      return isEmployee;
+    }
+    return true;
+  });
+
   return (
     <TooltipProvider delayDuration={0}>
       <Sidebar collapsible="icon" {...props}>
@@ -73,7 +84,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarGroupLabel>Navigation</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                {items.map((item) => (
+                {filteredItems.map((item) => (
+
                   <SidebarMenuItem key={item.title}>
                     <Tooltip>
                       <TooltipTrigger asChild>

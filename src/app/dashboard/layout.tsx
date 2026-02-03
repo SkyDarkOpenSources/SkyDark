@@ -39,15 +39,23 @@ export const metadata: Metadata = {
   },
 };
 
-export default function DashboardLayout({
+import { currentUser } from "@clerk/nextjs/server"
+import { isEmployee } from "../../../lib/actions/pro.action"
+
+export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const user = await currentUser();
+  const userEmail = user?.emailAddresses.find(e => e.id === user.primaryEmailAddressId)?.emailAddress || user?.emailAddresses[0]?.emailAddress || "";
+  const isUserEmployee = userEmail ? await isEmployee(userEmail) : false;
+
   return (
     <SidebarProvider>
-      <AppSidebar />
+      <AppSidebar isEmployee={isUserEmployee} />
       <SidebarInset>
+
         <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
           <SidebarTrigger className="-ml-1" />
           <Separator orientation="vertical" className="mr-2 h-4" />
