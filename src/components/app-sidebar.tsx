@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import type * as React from "react"
-import { Search, Home, UserRound, NewspaperIcon, Book, Cloud } from "lucide-react"
+import { Search, Home, UserRound, NewspaperIcon, Book, Cloud, Layers } from "lucide-react"
 import Link from "next/link"
 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
