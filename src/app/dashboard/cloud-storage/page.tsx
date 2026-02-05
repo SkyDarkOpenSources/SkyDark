@@ -89,6 +89,37 @@ export default async function CloudStoragePage() {
                 Connect Azure
               </Button>
             </div>
+
+            <div className="p-6 rounded-xl border bg-card/50 backdrop-blur-sm space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="flex items-center justify-center h-5 w-5 rounded bg-[#00e599]/20">
+                   <div className="h-3 w-3 rounded-full bg-[#00e599]" />
+                </div>
+                <h3 className="font-semibold text-lg">Neon Postgres</h3>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Connect your serverless Neon database. Scale to zero when not in use and manage your aerospace data with ease.
+              </p>
+              <Button variant="outline" size="sm" className="w-full mt-2" disabled>
+                Connect Neon
+              </Button>
+            </div>
+
+            <div className="p-6 rounded-xl border bg-card/50 backdrop-blur-sm space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="flex items-center justify-center h-5 w-5 rounded bg-orange-500/20">
+                   <div className="h-3 w-3 rounded-sm bg-orange-500 rotate-45" />
+                </div>
+                <h3 className="font-semibold text-lg">CDN & Edge Storage</h3>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Deploy assets closer to your ground stations using global CDN and edge storage for ultra-low latency telemetry.
+              </p>
+              <Button variant="outline" size="sm" className="w-full mt-2" disabled>
+                Configure CDN
+              </Button>
+            </div>
+
           </div>
           
           <div className="mt-8 p-4 bg-muted/50 rounded-lg text-center">
